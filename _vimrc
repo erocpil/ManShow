@@ -1,8 +1,8 @@
-﻿" vim: ts=4:tw=4:foldmethod=expr
+﻿" vim:tw=75:ts=4:ft=vim:foldmethod=expr
 " /*
 "  * Author: lipcore
-"  * Last modified: 星期日 16 一月 2011 10:50:16 下午 中国标准时间
-"  * Description:
+"  * Last modified: 星期二 25 一月 2011 09:43:18 下午 中国标准时间
+"  * Description: my personal vim configuration.
 "  * Version:
 "  */
 
@@ -90,7 +90,7 @@ if has("multi_byte")
 else
 	echoerr 'Sorry, this version of (g)Vim was not compiled with "multi_byte"'
 endif
-" ENCODINGS END }}}
+" encodings END }}}
 
 "" 在 shell 中指定要打开文件的编码 {{{
 " vim file_name -c "e ++enc=cp936"
@@ -113,8 +113,8 @@ if has("win32")
 endif
 " }}}
 
-" 判断 Vim 是否包含多字节语言支持，并且版本号大于 6.1 {{{
-if has('multi_byte') && v:version > 601
+" 判断 Vim 是否包含多字节语言支持，并且版本号大于 7.3 {{{
+if has('multi_byte') && v:version > 703
 	" 如果 Vim 的语言（受环境变量 LANG 影响）是中文（zh）、日文（ja）
 	" 或韩文（ko）的话，将模糊宽度的 Unicode 字符的宽度设为双宽度（double）
 	if v:lang =~? '^\(zh\)\|\(ja\)\|\(ko\)'
@@ -471,12 +471,17 @@ set smarttab
 " 不要在单词中间断行
 set lbr
 "" CTags
-set tags+=D:/dev/gtk/tags
-set path+=D:/dev/gtk/include/,D:/dev/gtk/include/*
-" too big, use it with care
-" set tags+=D:/Qt/qt/tags
-set tags+=D:/Qt/qt/include/tags
-set path+=D:/Qt/qt/include,D:/Qt/qt/include/*,D:/Qt/qt/src/,D:/Qt/qt/src/*,D:/Qt/qt/,D:/Qt/qt/*
+if has('win32')
+	set tags+=D:/dev/gtk/tags
+	set path+=D:/dev/gtk/include/,D:/dev/gtk/include/*
+	set tags+=D:/Qt/qt/include/tags
+	set tags+=D:/Qt/qt/src/tags
+	set path+=D:/Qt/qt/include,D:/Qt/qt/include/*,D:/Qt/qt/src/,D:/Qt/qt/src/*,D:/Qt/qt/,D:/Qt/qt/*
+else
+	set tags+=/opt/qtsdk/qt/include/tags
+	set tags+=/opt/qtsdk/qt/src/tags
+	set path+=/opt/qtsdk/qt/include,/opt/qtsdk/qt/include/*,/opt/qtsdk/qt/src/,/opt/qtsdk/qt/src/*,/opt/qtsdk/qt/,/opt/qtsdk/qt/*
+endif
 " }}}
 
 "" taglists {{{
@@ -516,7 +521,9 @@ let Tlist_File_Fold_Auto_Close=0
 " }}}
 
 "" ctags.vim {{{
-let g:ctags_path='E:\Software\Vim\vim73\ctags.exe'
+if has('win32')
+	let g:ctags_path='E:\Software\Vim\vim73\ctags.exe'
+endif
 let g:ctags_title=0			" To show tag name in title bar.
 let g:ctags_statusline=0	" To show tag name in status line.
 let generate_tags=1			" To start automatically when a supported file is opened.
@@ -566,7 +573,7 @@ map <M-/> <Plug>NERDCommenterToggle
 imap <M-/> <C-O><Plug>NERDCommenterToggle
 " }}}
 
-" 窗口区域切换,F5 后 ↑↓←→  来切换 {{{
+" 切换窗口 {{{
 " S
 imap <silent> <S-left> <esc><C-W><left>
 vmap <silent> <S-left> <esc><C-W><left>
@@ -587,12 +594,12 @@ nmap <silent> <M-h> <C-W><left>
 " imap <silent> <M-l> <esc><C-W><right>
 vmap <silent> <M-l> <esc><C-W><right>
 nmap <silent> <M-l> <C-W><right>
-" imap <silent> <M-j> <esc><C-W><up>
-vmap <silent> <M-j> <esc><C-W><up>
-nmap <silent> <M-j> <C-W><up>
-" imap <silent> <M-k> <esc><C-W><down>
-vmap <silent> <M-k> <esc><C-W><down>
-nmap <silent> <M-k> <C-W><down>
+" imap <silent> <M-k> <esc><C-W><up>
+vmap <silent> <M-k> <esc><C-W><up>
+nmap <silent> <M-k> <C-W><up>
+" imap <silent> <M-j> <esc><C-W><down>
+vmap <silent> <M-j> <esc><C-W><down>
+nmap <silent> <M-j> <C-W><down>
 " }}}
 
 "" acp {{{
@@ -961,7 +968,7 @@ set printmbcharset=ISO10646
 " 打印所用字体, 在linux下, 要用ghostscript里已有的字体, 不然会打印乱码.
 " set printmbfont=r:STSong-Light,c:yes "MSungGBK-Light
 " set printmbfont=r:MicrosoftYaHei,b:STHeiti-Regular,i:FangSong,o:STFangsong-Light,c:yes "MSungGBK-Light
-set printmbfont=r:bkai,b:ShanHeiSun-Light,i:bsmi,o:gbsn,c:yes "MSungGBK-Light
+set printmbfont=r:bkaiu,b:ShanHeiSun-Light,i:bsmi,o:gbsn,c:yes "MSungGBK-Light
 " 打印可选项, formfeed: 是否处理换页符, header: 页眉大小, paper: 用何种纸, duplex: 是否双面打印, syntax: 是否支持语法高
 set printoptions=formfeed:y,header:5,paper:A4,duplex:on,syntax:y
 " 页眉格式
@@ -1091,14 +1098,14 @@ imap <M-q> <ESC>:q<cr>
 if has("win32")
 	"" words complete
 	au FileType txt setlocal dict+=$VIM/vimfiles/ExtraVim/zh_CN.dic
-	au FileType txt setlocal dict+=$VIM/vimfiles/ExtraVim/eng_small.dic
+	au FileType txt setlocal dict+=$VIM/vimfiles/ExtraVim/en_US.dic
 	au FileType tex setlocal dict+=$VIM/vimfiles/ExtraVim/latex.dic
 	"" yankring
 	let g:yankring_history_dir = '$VIM'
 else
 	"" words complete
 	au FileType txt setlocal dict+=$HOME/.vim/ExtraVim/zh_CN.dic
-	au FileType txt setlocal dict+=$HOME/.vim/ExtraVim/eng_small.dic
+	au FileType txt setlocal dict+=$HOME/.vim/ExtraVim/en_US.dic
 	au FileType tex setlocal dict+=$HOME/.vim/ExtraVim/latex.dic
 	"" yankring
 	let g:yankring_history_dir = '~/'
@@ -1315,13 +1322,23 @@ let timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
 " }}}
 
 "" Perl {{{
+" Hack 5. Autocomplete Perl Identifiers in Vim
+set iskeyword+=:
+" Run Tests from Within Vim
+" form: Perl Hacks, Chapter 1, Hack 10.
+" run the currently edited test file
+" map <leader>pt <Esc>:!prove -v1 %<CR>
+" If lib/ is not where you typically do your development, use the I switch to add a different path to @INC.
+map <leader>pt  <Esc>:!prove -Iwork/ -v %<CR>
+" Seeing failures
+map <leader>pT <Esc>:!prove -lv % \\| less<CR>
 let perl_extended_vars=1
 set matchpairs+=<:>  " allow % to bounce between angles
 " perl-support
 let g:Perl_AuthorName      = 'lipcore'
 let g:Perl_AuthorRef       = 'http://lxh.heliohost.org/'
 let g:Perl_Email           = 'erocpil@gmail.com'
-let g:Perl_Company         = 'Celibate'
+let g:Perl_Company         = 'lipcore'
 " }}}
 
 "" Open URL in browser {{{
@@ -1492,25 +1509,42 @@ nmap <leader>d :!curl dict://dict.org/d:<cword><CR><CR>
 "" signs {{{
 nmap <M-g> :call sjump#JumpToLabel()<cr>
 if has('signs')
-	"" SignColumn
-	sign define sc text=>> texthl=SignColumn linehl=Search
-	sign define siv text=-> icon=e:/Software/Vim/Icons/vim.xpm texthl=SignColumn linehl=ModeMsg
-	sign define sir text=-> icon=e:/Software/Vim/Icons/apple-red.xpm texthl=SignColumn linehl=ErrorMsg
-	sign define sig text=-> icon=e:/Software/Vim/Icons/apple-green.xpm texthl=SignColumn linehl=Question
-	sign define sid text=-> icon=e:/Software/Vim/Icons/debian-logo.xpm texthl=SignColumn linehl=IncSearch
-	sign define sia text=-> icon=e:/Software/Vim/Icons/gnome-aorta.xpm texthl=SignColumn linehl=StatusLine
-	sign define sie text=-> icon=e:/Software/Vim/Icons/gnome-emacs.xpm texthl=SignColumn linehl=Visual
-	sign define sip text=-> icon=e:/Software/Vim/Icons/gnome-gimp.xpm texthl=SignColumn linehl=VisualNOS
-	sign define siu text=-> icon=e:/Software/Vim/Icons/gnome-suse.xpm texthl=SignColumn linehl=Directory
-	sign define sii text=-> icon=e:/Software/Vim/Icons/iceweasel.xpm texthl=SignColumn linehl=LineNr
-	" sign define sig icon=e:/Software/Vim/Icons/.xpm texthl=SignColumn linehl=Question
-	" sign place {id} line={lnum} name={name} file={fname}
-	" sign place {id} line={lnum} name={name} buffer={nr}
-	" sign place {id} name={name} file={fname}
-	" sign place {id} name={name} buffer={nr}
-	" sign jump {id} file={fname}
-	" sign jump {id} buffer={nr}
-	nmap <leader>sc :exe ":sign place 1 line=" . line('.') . " name=sc file=" . expand("%:p")<cr>
+	if has('win32')
+		"" SignColumn
+		sign define scc text=>> texthl=SignColumn linehl=Search
+		sign define siv text=-> icon=e:/Software/Vim/Icons/vim.xpm texthl=SignColumn linehl=ModeMsg
+		sign define sir text=-> icon=e:/Software/Vim/Icons/apple-red.xpm texthl=SignColumn linehl=ErrorMsg
+		sign define sig text=-> icon=e:/Software/Vim/Icons/apple-green.xpm texthl=SignColumn linehl=Question
+		sign define sid text=-> icon=e:/Software/Vim/Icons/debian-logo.xpm texthl=SignColumn linehl=IncSearch
+		sign define sia text=-> icon=e:/Software/Vim/Icons/gnome-aorta.xpm texthl=SignColumn linehl=StatusLine
+		sign define sie text=-> icon=e:/Software/Vim/Icons/gnome-emacs.xpm texthl=SignColumn linehl=Visual
+		sign define sip text=-> icon=e:/Software/Vim/Icons/gnome-gimp.xpm texthl=SignColumn linehl=VisualNOS
+		sign define siu text=-> icon=e:/Software/Vim/Icons/gnome-suse.xpm texthl=SignColumn linehl=Directory
+		sign define sii text=-> icon=e:/Software/Vim/Icons/iceweasel.xpm texthl=SignColumn linehl=LineNr
+		" sign define sig icon=e:/Software/Vim/Icons/.xpm texthl=SignColumn linehl=Question
+		" sign place {id} line={lnum} name={name} file={fname}
+		" sign place {id} line={lnum} name={name} buffer={nr}
+		" sign place {id} name={name} file={fname}
+		" sign place {id} name={name} buffer={nr}
+		" sign jump {id} file={fname}
+		" sign jump {id} buffer={nr}
+	else
+		sign define scc text=〠 texthl=SignColumn linehl=Search
+		sign define sch text=☯☎ texthl=SignColumn linehl=Search
+		sign define sct text=〄 texthl=SignColumn linehl=Search
+		sign define siv text=♥ icon=/root/Media/Icons/vim.png texthl=SignColumn linehl=ModeMsg
+		sign define sir text=♥ icon=/root/Media/Icons/apple-red.png texthl=SignColumn linehl=ErrorMsg
+		sign define sig text=♥ icon=/root/Media/Icons/apple-green.png texthl=SignColumn linehl=Question
+		sign define sid text=♥ icon=/root/Media/Icons/debian-logo.png texthl=SignColumn linehl=IncSearch
+		sign define sia text=♥ icon=/root/Media/Icons/gnome-aorta.png texthl=SignColumn linehl=StatusLine
+		sign define sie text=♥ icon=/root/Media/Icons/gnome-emacs.png texthl=SignColumn linehl=Visual
+		sign define sip text=♥ icon=/root/Media/Icons/gnome-gimp.png texthl=SignColumn linehl=VisualNOS
+		sign define siu text=♥ icon=/root/Media/Icons/gnome-suse.png texthl=SignColumn linehl=Directory
+		sign define sii text=♥ icon=/root/Media/Icons/iceweasel.png texthl=SignColumn linehl=LineNr
+	endif
+	nmap <leader>scc :exe ":sign place 1 line=" . line('.') . " name=scc file=" . expand("%:p")<cr>
+	nmap <leader>sch :exe ":sign place 1 line=" . line('.') . " name=sch file=" . expand("%:p")<cr>
+	nmap <leader>sct :exe ":sign place 1 line=" . line('.') . " name=sct file=" . expand("%:p")<cr>
 	nmap <leader>jsc :exe ":sign jump 1 file=" . expand("%:p")<cr>
 	nmap <leader>sv :exe ":sign place 2 line=" . line('.') . " name=siv file=" . expand("%:p")<cr>
 	nmap <leader>jsv :exe ":sign jump 2 file=" . expand("%:p")<cr>
@@ -1551,8 +1585,7 @@ if has('signs')
 	" sign place file={fname}
 	" sign jump {id} file={fname}
 	"" SignColumn END
-	"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-	"" FlagIt -- 使用 SignColumn 简单方法
+	"" FlagIt -- 使用 SignColumn 简单方法 {{{
 	map <leader>fa :FlagIt arrow<CR>
 	map <leader>ff :FlagIt function<CR>
 	map <leader>fw :FlagIt warning<CR>
@@ -1564,15 +1597,24 @@ if has('signs')
 	map <leader>fE :UnFlag error<CR>
 	map <leader>fS :UnFlag step<CR>
 	map <leader>uf :UnFlag<CR>
-	let icons_path = "e:/Software/Vim/Icons/16x16/actions/"
-	let g:Fi_Flags = { "arrow" : [icons_path."address-book-new.xpm", "> ", 1, "texthl=Title"],
-				\ "function" : [icons_path."appointment-new.xpm", "+ ", 0, "texthl=Comment"],
-				\ "warning" : [icons_path."bookmark-new.xpm", "! ", 0, "texthl=WarningMsg"],
-				\ "error" : [icons_path."contact-new.xpm", "XX", "true", "texthl=ErrorMsg linehl=ErrorMsg"],
-				\ "step" : [icons_path."document-new.xpm", "..", "true", ""] }
+	if has('win32')
+		let icons_path = "e:/Software/Vim/Icons/16x16/actions/"
+		let g:Fi_Flags = { "arrow" : [icons_path."address-book-new.xpm", "> ", 1, "texthl=Title"],
+					\ "function" : [icons_path."appointment-new.xpm", "+ ", 0, "texthl=Comment"],
+					\ "warning" : [icons_path."bookmark-new.xpm", "! ", 0, "texthl=WarningMsg"],
+					\ "error" : [icons_path."contact-new.xpm", "XX", "true", "texthl=ErrorMsg linehl=ErrorMsg"],
+					\ "step" : [icons_path."document-new.xpm", "..", "true", ""] }
+	else
+		let icons_path = "/root/Media/Icons/16x16/actions/"
+		let g:Fi_Flags = { "arrow" : [icons_path."address-book-new.png", "> ", 1, "texthl=Title"],
+					\ "function" : [icons_path."appointment-new.png", "+ ", 0, "texthl=Comment"],
+					\ "warning" : [icons_path."bookmark-new.png", "! ", 0, "texthl=WarningMsg"],
+					\ "error" : [icons_path."contact-new.png", "XX", "true", "texthl=ErrorMsg linehl=ErrorMsg"],
+					\ "step" : [icons_path."document-new.png", "..", "true", ""] }
+	endif
 	let g:Fi_OnlyText = 0
 	let g:Fi_ShowMenu = 1
-	"" FlagIt END
+	"" FlagIt END }}}
 endif
 " signs END}}}
 
@@ -1648,7 +1690,7 @@ let g:indent_guides_auto_colors = 0
 autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd	guibg=Grey20	ctermbg=3
 autocmd VimEnter,Colorscheme * :hi IndentGuidesEven	guibg=Grey25	ctermbg=4
 " let g:indent_guides_color_change_percent = 50
-let g:indent_guides_start_level = 1
+let g:indent_guides_start_level = 0
 let g:indent_guides_guide_size = 1
 " }}}
 

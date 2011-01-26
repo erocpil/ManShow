@@ -1,6 +1,6 @@
 " /*
 "  * Author: lipcore
-"  * Last modified: 星期日 16 一月 2011 10:36:43 下午 中国标准时间
+"  * Last modified: Tue 25 Jan 2011 01:44:26 PM GMT
 "  * Filename: Celibate.vim
 "  * Description:
 "  * Version:
@@ -23,10 +23,10 @@ hi PreProc		                    guifg=#5BBD2B	ctermfg=LightGray   ctermbg=none  
 " hi Constant 		                guifg=#1094a0	ctermfg=Brown       ctermbg=none		term=underline
 "
 " hi Special							guifg=#FF9911   guibg=grey95			ctermfg=Brown       ctermbg=Black       term=bold
-hi Special							guifg=#FF9911   guibg=grey15			ctermfg=Brown       ctermbg=Black       term=bold
+hi Special							guifg=#CAFF70	guibg=grey10			ctermfg=Brown       ctermbg=Black       term=bold
 hi Identifier		                guifg=#3c960f	ctermfg=LightGray   ctermbg=none
 hi Tag								guifg=#B0E0E6
-hi Statement 	                    guifg=#009298	ctermfg=White       ctermbg=none        term=bold       cterm=bold  gui=bold
+hi Statement 	                    guifg=#A020F0	ctermfg=White       ctermbg=none        term=bold       cterm=bold  gui=bold "#F09298
 hi Type			                    guifg=#80C97F   ctermfg=LightCyan   ctermbg=none      	term=underline  gui=NONE
 " hi Title 		                    guifg=#C8E2FF   ctermfg=Cyan        ctermbg=DarkBlue	term=bold	    gui=bold
 " hi Question 		                guifg=#80C9FF   ctermfg=Blue        ctermbg=none        cterm=bold      term=bold   gui=bold
@@ -102,12 +102,19 @@ hi VisualNOS 		guibg=#25345F   guifg=#526A83   ctermfg=White       ctermbg=none 
 " hi DiffChange 		guibg=#D26C00		            gui=underline
 " hi DiffDelete 		guibg=#AA4400   guifg=#DDDDDD   gui=bold
 
-hi perlSpecialMatch		guifg=#FF9911   guibg=White	ctermfg=Brown       ctermbg=Black
-hi perlSpecialString	guifg=#FF9911   guibg=#FEF8C9	ctermfg=Brown       ctermbg=Black
-hi perlVarPlain			guifg=DarkBlue	guibg=#E0FFFF
-hi perlMatchStartEnd	guifg=Blue	guibg=#A095C4
+hi perlMatch			guifg=#FF99FF   guibg=Grey5	ctermfg=Brown       ctermbg=Black
+hi perlSubstitutionGQQ	guifg=#FF99AA   guibg=Grey25	ctermfg=Brown       ctermbg=Black
+hi perlSpecialMatch		guifg=#FF9900   guibg=White	ctermfg=Brown       ctermbg=Black
+hi perlSpecialString	guifg=#FF9911   guibg=Grey35	ctermfg=Brown       ctermbg=Black
+hi perlVarPlain			guifg=Yellow	guibg=Grey15
+hi perlMatchStartEnd	gui=bold	guifg=Green	guibg=Grey15
+hi perlStringStartEnd	guifg=Cyan	guibg=Grey15
+hi perlSubname			gui=bold	guifg=Cyan2	guibg=Grey5
+" hi perlString		guifg=Cyan2	guibg=Grey5
+hi perlNumber		guifg=#5BFD2B
 
-hi txtList			guibg=grey80
+hi txtList			guibg=grey20	guifg=DarkYellow
+hi txtReference		guibg=grey25	guifg=DarkYellow
 hi tooltip			guibg=Red
 
 if has("gui_running")
@@ -142,17 +149,17 @@ hi StatuslineFlag		cterm=none   	ctermfg=black 	ctermbg=cyan   	gui=none	guibg=R
 hi StatuslinePath		cterm=none   	ctermfg=white 	ctermbg=green  	gui=none	guibg=#C82E31	guifg=Black
 hi StatuslineFileName	cterm=none   	ctermfg=white 	ctermbg=blue   	gui=none	guibg=#D59B00	guifg=Black
 hi StatuslineFileEnc	cterm=none   	ctermfg=white 	ctermbg=yellow 	gui=none	guibg=#DCD800	guifg=Blue
-hi StatuslineFileFormat	cterm=bold   	ctermbg=white 	ctermfg=black  	gui=none	guibg=DarkGreen	guifg=LightMagenta
-hi StatuslineFileBomb	cterm=bold   	ctermbg=white 	ctermfg=black  	gui=none	guibg=DarkBlue	guifg=LightRed
+hi StatuslineFileFormat	cterm=bold   	ctermbg=white 	ctermfg=black  	gui=none	guibg=Green	guifg=#F9F400
+hi StatuslineFileBomb	cterm=bold   	ctermbg=white 	ctermfg=black  	gui=none	guibg=Green3	guifg=White
 hi StatuslineFileType	cterm=bold   	ctermbg=white 	ctermfg=black  	gui=none	guibg=#50A625	guifg=Black
-hi StatuslineTermEnc	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=Green		guifg=Black
-hi SpellLang			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#00AE72	guifg=Black
-hi StatuslineFoldInfo	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=DarkBlue	guifg=White
+hi StatuslineTermEnc	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=Green4	guifg=Black
+hi SpellLang			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#008489	guifg=White
+hi StatuslineFoldInfo	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=steelblue1	guifg=Black
 
-hi TextMode				cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=steelblue	guifg=White
-hi StatuslineSyn		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#00B2BF	guifg=Black
-hi StatuslineRealSyn	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=Cyan		guifg=Black
-hi TlistGetTagname		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
+hi TextMode				cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=Cyan		guifg=White
+hi StatuslineRealSyn	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#00B2BF	guifg=Black
+hi StatuslineSyn		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#00AE72	guifg=White
+" hi TlistGetTagname		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
 " hi UpTime				cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=steelblue	guifg=White
 hi GetTagname			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
 

@@ -44,3 +44,7 @@ syn match    cCustomClassDef    "\w+\s+\w\+" contains=cCustomClassName
 " syntax region cWhile matchgroup=cWhile start=/while\s*(/ end=/)/ contains=cCondNest
 " syntax region cFor matchgroup=cFor start=/for\s*(/ end=/)/ contains=cCondNest
 " syntax region cCondNest start=/(/ end=/)/ contained transparent
+
+" Qt
+syn keyword cppStatement SLOT,SIGNAL
+syn keyword cppAccess slots,signals

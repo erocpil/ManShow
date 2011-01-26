@@ -1,6 +1,6 @@
 " /*
 "  * Author: lipcore
-"  * Last modified: 星期六 08 一月 2011 01:26:07 下午 中国标准时间
+"  * Last modified: 星期一 24 一月 2011 07:06:07 下午 中国标准时间
 "  * Filename: ManShow.vim
 "  * Description:
 "  */
@@ -22,11 +22,19 @@ nmap ,t <Plug>view:switch_status_path_length
 
 set laststatus=2
 
-augroup Statusline
-	au! Statusline
-	au BufEnter * call <SID>SetFullStatusline() | set title titlestring=%<%(%{Tlist_Get_Tag_Prototype_By_Line()}\ \ \ %)%([%M]%)%f%{FileInfo()}\ %{getcwd()}\ %=%l/%L-%P titlelen=100
-	au BufLeave,BufNew,BufRead,BufNewFile * call <SID>SetSimpleStatusline() | set title titlestring=""
-augroup END
+if has('gui_running')
+	augroup Statusline
+		au! Statusline
+		au BufEnter * call <SID>SetFullStatusline() | set title titlestring=%<%(%{Tlist_Get_Tag_Prototype_By_Line()}\ \ \ %)%([%M]%)%f%{FileInfo()}\ %{getcwd()}\ %=%l/%L-%P titlelen=100
+		au BufLeave,BufNew,BufRead,BufNewFile * call <SID>SetFullStatusline() | set title titlestring=""
+	augroup END
+else
+	augroup Statusline
+		au! Statusline
+		au BufEnter * call <SID>SetSimpleStatusline() | set title titlestring=%<%(%{Tlist_Get_Tag_Prototype_By_Line()}\ \ \ %)%([%M]%)%f%{FileInfo()}\ %{getcwd()}\ %=%l/%L-%P titlelen=100
+		au BufLeave,BufNew,BufRead,BufNewFile * call <SID>SetSimpleStatusline() | set title titlestring=""
+	augroup END
+endif
 
 fun! StatusLineRealSyn()
 	let synId = synID(line('.'),col('.'),1)
