@@ -1,6 +1,6 @@
 " /*
 "  * Author: lipcore
-"  * Last modified: 星期一 24 一月 2011 07:06:07 下午 中国标准时间
+"  * Last modified: 星期三 02 二月 2011 06:06:22 下午 中国标准时间
 "  * Filename: ManShow.vim
 "  * Description:
 "  */
@@ -53,7 +53,7 @@ fun! s:SetFullStatusline() "{{{
 	setlocal statusline+=%#StatuslineLastBufferNr#%{bufnr('$')}
 	setlocal statusline+=%h%#StatuslineFlag#%m%r%w								" flags
 	setlocal statusline+=%#StatuslinePath#%-0.20{StatusLineGetPath()}%0*		" path
-	setlocal statusline+=%#StatuslineFileName#%t\ 							" file name
+	setlocal statusline+=%#StatuslineFileName#%t							" file name
 	setlocal statusline+=%#StatuslineFileEnc#%{&fileencoding}					" file encoding
 	setlocal statusline+=%#StatuslineFileFormat#%{&fileformat}					" file format
 	setlocal statusline+=%#StatuslineFileBomb#%{&bomb?'b':'B'}
@@ -73,6 +73,7 @@ fun! s:SetFullStatusline() "{{{
 	" setlocal statusline+=%#UpTime#%{RetUpTime()}%0*							" uptime
 	" setlocal statusline+=%#ShowUtf8Sequence#%{ShowUtf8Sequence()}				" utf-8 sequence
 	setlocal statusline+=%=
+	setlocal statusline+=%#MvpInfo#%{GetMvpInfo()}%0*				"
 	"" take too much space, added to titlestring
 	" setlocal statusline+=%#FileInfo#%{FileTime()}
 	setlocal statusline+=%#StatuslineChar#%-2B%0*								" current char

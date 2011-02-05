@@ -1,7 +1,7 @@
 ﻿" vim:tw=75:ts=4:ft=vim:foldmethod=expr
 " /*
 "  * Author: lipcore
-"  * Last modified: 星期二 25 一月 2011 09:43:18 下午 中国标准时间
+"  * Last modified: 星期六 05 二月 2011 01:51:15 下午 中国标准时间
 "  * Description: my personal vim configuration.
 "  * Version:
 "  */
@@ -303,10 +303,11 @@ map <leader>bd :bd<cr>
 map <leader>vn :vnew<cr>
 map <leader>hs :split<cr>
 map <leader>vs :vsplit<cr>
-"" buffer
+" buffer
 map <leader>bn :bn<cr>
 map <leader>bp :bp<cr>
-"" Fast saving
+map <leader>cw :cw<cr>
+" Fast saving
 nmap <leader>w :w!<cr>
 " }}}
 
@@ -377,6 +378,7 @@ set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
 set viminfo='1000,f1,<500,n$VIM\\_viminfo
 " }}}
 
+"" {{{
 "" 带有如下符号的单词不要被换行分割
 set iskeyword+=_,$,@,%,#,-
 "" 语法高亮
@@ -407,14 +409,33 @@ set rulerformat=%20(%2*%<%f%=\ %m%r\ %3l\ %c\ %p%%%)
 " set cmdheight=2
 " 使回格键（backspace）正常处理indent, eol, start等
 set backspace=2
-" 允许backspace和光标键跨越行边界
-set whichwrap+=<,>,h,l
-" 可以在buffer的任何地方使用鼠标（类似office中在工作区双击鼠标定位）
+" }}}
+
+"" 允许backspace和光标键跨越行边界 {{{
+" set whichwrap+=<,>,h,l
+" http://www.vi-improved.org/vimrc.php
+set whichwrap=b,s,h,l,<,>,~,[,] " everything wraps
+"             | | | | | | | | |
+"             | | | | | | | | +-- "]" Insert and Replace
+"             | | | | | | | +-- "[" Insert and Replace
+"             | | | | | | +-- "~" Normal
+"             | | | | | +-- <Right> Normal and Visual
+"             | | | | +-- <Left> Normal and Visual
+"             | | | +-- "l" Normal and Visual (not recommended)
+"             | | +-- "h" Normal and Visual (not recommended)
+"             | +-- <Space> Normal and Visual
+"             +-- <BS> Normal and Visual
+" }}}
+
+" 可以在buffer的任何地方使用鼠标 {{{
 if has('mouse')
 	set mouse=a
 	set selection=exclusive
 	set selectmode=mouse,key
 endif
+" }}}
+
+"" common {{{
 " 启动的时候不显示那个援助索马里儿童的提示
 set shortmess=atI
 " 通过使用: commands命令，告诉我们文件的哪一行被改变过
@@ -470,7 +491,9 @@ set smarttab
 "" 断行设置
 " 不要在单词中间断行
 set lbr
-"" CTags
+" }}}
+
+"" CTags {{{
 if has('win32')
 	set tags+=D:/dev/gtk/tags
 	set path+=D:/dev/gtk/include/,D:/dev/gtk/include/*
@@ -499,8 +522,8 @@ endif
 " ]]            跳到后一个文件
 " q             关闭taglist窗口
 " <F1>          显示帮助
-" nnoremap <silent> <F7> :TlistToggle<CR>
-map <C-F7> :TlistToggle<cr>
+" nnoremap <silent> <C-F7> :TlistToggle<CR>
+map <F7> :TlistToggle<cr>
 " 按照名称排序
 let Tlist_Sort_Type = "name"
 " 在右侧显示窗口
@@ -549,7 +572,6 @@ map <C-F8> :WMToggle<cr>
 " }}}
 
 "" omnicppcomplete {{{
-" map <C-F12> :!ctags -R --c-kinds=+p --fields=+iaS --extra=+q -f tags_local .<CR>
 " map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q -f tags_local .<CR>
 map <C-F12> :!ctags -R --c-kinds=+p --fields=+iaS --extra=+q .<CR>
 map <F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
@@ -600,6 +622,8 @@ nmap <silent> <M-k> <C-W><up>
 " imap <silent> <M-j> <esc><C-W><down>
 vmap <silent> <M-j> <esc><C-W><down>
 nmap <silent> <M-j> <C-W><down>
+nmap <silent> <M-o> <C-w>o
+imap <silent> <M-o> <ESC><C-w>o
 " }}}
 
 "" acp {{{
@@ -787,7 +811,7 @@ set foldopen -=undo
 " 去除空行
 " set foldexpr=getline(v:lnum)=~'\\S'&&getline(v:lnum-1)!~'\\S'?'>1':'='
 au FileType txt,vim set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=2
-au FileType cpp,c,java set foldmethod=syntax | set foldcolumn=1
+au FileType cpp,c,java set foldmethod=syntax | set foldcolumn=2
 au FileType perl,tex,php,html,css,sh set foldmethod=indent | set foldcolumn=1
 nmap <leader>fc :set foldcolumn=1<cr>
 nmap <leader>fC :set foldcolumn=0<cr>
@@ -902,12 +926,10 @@ let g:miniBufExplModSelTarget = 1
 " }}}
 
 "" Omni menu colors {{{
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" Pmenu		普通项 |hl-Pmenu|
 "" PmenuSel	选中项 |hl-PmenuSel|
 "" PmenuSbar	滚动条 |hl-PmenuSbar|
 "" PmenuThumb	滚动条拇指 (thumb) |hl-PmenuThumb|
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "" 这一部分写在 Celibate.vim
 " hi Pmenu guibg=#00b2bf guifg=#ffffff
 " hi PmenuSel guibg=#40FF7F guifg=#9B30FF
@@ -1079,6 +1101,10 @@ au FileType cpp,c,perl,html,lisp,java,php,tex,vim,sh imap ( ()<ESC>i
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-a> <ESC>I
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-e> <ESC>A
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-l> <ESC>f)a
+"" How to use?
+"" inoremap ( ()<Esc>:let leavechar=")"<CR>i
+"" inoremap [ []<Esc>:let leavechar="]"<CR>i
+"" imap <CR> <Esc>:exec "normal f" . leavechar<CR>a
 " au FileType tex,cpp,c,perl imap <C-p> <Up>
 " au FileType tex,cpp,c,perl imap <C-n> <Down>
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-b> <Left>
@@ -1089,7 +1115,7 @@ au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <M-h> <Left>
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <M-l> <Right>
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-d> <ESC>lxi
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-k> <ESC>ld$a
-au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <M-o> <ESC>o
+au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-o> <ESC>O
 " 和 SignColumn 冲突，先不用这个
 " imap <M-s> <ESC>:w<cr>
 imap <M-q> <ESC>:q<cr>
@@ -1721,6 +1747,10 @@ function! ClosePair(char)
 		return a:char
 	endif
 endfunction
+
+"" select & search
+vnoremap <silent> <leader>/ y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
+vnoremap <silent> <leader>? y?<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
 
 " goto the last line when you reopen a file {{{
 au BufReadPost * if line("'\"")>0 |

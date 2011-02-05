@@ -1,6 +1,6 @@
 " /*
 "  * Author: lipcore
-"  * Last modified: Tue 25 Jan 2011 01:44:26 PM GMT
+"  * Last modified: 星期六 05 二月 2011 11:39:49 上午 中国标准时间
 "  * Filename: Celibate.vim
 "  * Description:
 "  * Version:
@@ -40,7 +40,7 @@ hi Todo			    guibg=yellow2   guifg=orangered ctermfg=Brown       ctermbg=Yellow
 " hi ModeMsg 		                    guifg=#80C9FF   ctermfg=Blue        ctermbg=none        cterm=bold      term=bold   gui=bold
 " hi MoreMsg 		                    guifg=#80C9FF   ctermfg=Blue        ctermbg=none        cterm=bold      term=bold   gui=bold
 " hi NonText 		    guibg=#2D3D4F   guifg=#405871   ctermfg=DarkGray    ctermbg=none        cterm=bold      term=bold   gui=bold
-hi MatchParen       guibg=Yellow	guifg=Green	ctermfg=Brown       ctermbg=none        cterm=bold      term=bold   gui=bold
+hi MatchParen	guibg=Yellow	guifg=Green	ctermfg=Brown       ctermbg=none        cterm=bold      term=bold   gui=bold
 "
 " hi Normal	ctermfg=Black	ctermbg=LightGrey	guifg=SteelBlue4		guibg=Black
 hi Normal	ctermfg=Black	ctermbg=LightGrey	guifg=#5EA7DD		guibg=Black		" #5E07DD 紫色
@@ -104,14 +104,15 @@ hi VisualNOS 		guibg=#25345F   guifg=#526A83   ctermfg=White       ctermbg=none 
 
 hi perlMatch			guifg=#FF99FF   guibg=Grey5	ctermfg=Brown       ctermbg=Black
 hi perlSubstitutionGQQ	guifg=#FF99AA   guibg=Grey25	ctermfg=Brown       ctermbg=Black
-hi perlSpecialMatch		guifg=#FF9900   guibg=White	ctermfg=Brown       ctermbg=Black
-hi perlSpecialString	guifg=#FF9911   guibg=Grey35	ctermfg=Brown       ctermbg=Black
+hi perlSpecialMatch		guifg=#FF9900   guibg=Grey35	ctermfg=Brown       ctermbg=Black
+hi perlSpecialString	guifg=#FF9911   guibg=Grey20	ctermfg=Brown       ctermbg=Black
 hi perlVarPlain			guifg=Yellow	guibg=Grey15
+hi perlVarPlain2			guifg=YellowGreen	guibg=Grey20
 hi perlMatchStartEnd	gui=bold	guifg=Green	guibg=Grey15
 hi perlStringStartEnd	guifg=Cyan	guibg=Grey15
 hi perlSubname			gui=bold	guifg=Cyan2	guibg=Grey5
 " hi perlString		guifg=Cyan2	guibg=Grey5
-hi perlNumber		guifg=#5BFD2B
+hi perlNumber		guifg=#EB7153
 
 hi txtList			guibg=grey20	guifg=DarkYellow
 hi txtReference		guibg=grey25	guifg=DarkYellow
@@ -165,6 +166,8 @@ hi GetTagname			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33
 
 hi FileTime				term=reverse	cterm=reverse	gui=none	guibg=LightYellow	guifg=LightBlue
 hi StatusLine			term=reverse,bold	cterm=reverse,bold	ctermbg=white	ctermfg=yellow	gui=none	guibg=Grey10	guifg=White	" guibg=#99D1D3	guifg=Black	"#729eb0
+hi MvpInfo		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#A020F0	guifg=White
+
 " hi ShowUtf8Sequence		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#EEEEEE   guifg=#729eb0
 hi StatuslineChar		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#52096C	guifg=#F9F400
 hi StatuslineCapsBuddy	cterm=none		ctermfg=white	ctermbg=green	gui=none	guibg=#8ae234	guifg=Blue
