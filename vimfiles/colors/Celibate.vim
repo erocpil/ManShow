@@ -124,7 +124,7 @@ if has("gui_running")
 	"
 	"   hi CursorLine		term=underline	cterm=underline	guibg=#CAE5E8
 	hi CursorLine		term=underline	cterm=underline	guibg=grey10
-	hi CursorColumn		term=reverse	ctermbg=grey	guibg=#99D1D3
+	hi CursorColumn		term=reverse	ctermbg=grey	guibg=Grey5	" #99D1D3
 endif
 
 " hi Pmenu guibg=#00b2bf guifg=#ffffff

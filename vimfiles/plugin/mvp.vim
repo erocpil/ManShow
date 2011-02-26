@@ -1,32 +1,28 @@
 let g:mvpTitle = "title"
 let g:mvpArticle= "no article"
 
-function! LRC_Perl()
+function! Lrc_Perl()
 perl << eop
 use threads;
 use Win32::OLE;
 use Time::HiRes qw /usleep/;
 
 ## open lrc
-if(! open LRC, "<", "snow.lrc")
-# if(! open LRC, "<", "rose.lrc")
-{
-    die "There is no lrc! $!";
-}
+open LRC, 'snow.lrc' or die "Cannot open lrc: $!";
 
 ## start player in a thread
 sub thread_play
 {
-    if (defined $shell)
+    if (!defined $shell)
     {
-		VIM::Msg($shell);
-        $shell->run("mplayer Ʈѩ.mp3", 0, 0);
-    }
-	else
-	{
-		VIM::Msg("init $shell");
+	# 		VIM::Msg($shell);
+	#         $shell->run("mplayer Ʈѩ.mp3", 0, 0);
+	#     }
+	# 	else
+	# 	{
+	# 		VIM::Msg("init $shell");
 		my $shell = Win32::OLE->new("WScript.Shell");
-        $shell->run("mplayer Ʈѩ.mp3", 0, 0);
+        $shell->run("mplayer snow.mp3", 0, 0);
 	}
     return 0;
 }
@@ -88,4 +84,4 @@ function! GetMvpInfo()
 	endif
 endfunction
 
-nmap <leader>mp :call LRC_Perl()<cr>
+nmap <leader>mp :call Lrc_Perl()<cr>
