@@ -1,9 +1,9 @@
-" /*
-"  * Author: lipcore
-"  * Last modified: 星期三 02 二月 2011 06:06:22 下午 中国标准时间
-"  * Filename: ManShow.vim
-"  * Description:
-"  */
+" vim: ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
+" Author: lipcore
+" TimeStamp: 星期三 02 二月 2011 06:06:22 下午 中国标准时间
+" Filename: ManShow.vim
+" Description:
+"
 
 let g:statusline_max_path = 20
 fun! StatusLineGetPath() "{{{
@@ -26,7 +26,7 @@ if has('gui_running')
 	augroup Statusline
 		au! Statusline
 		au BufEnter * call <SID>SetFullStatusline() | set title titlestring=%<%(%{Tlist_Get_Tag_Prototype_By_Line()}\ \ \ %)%([%M]%)%f%{FileInfo()}\ %{getcwd()}\ %=%l/%L-%P titlelen=100
-		au BufLeave,BufNew,BufRead,BufNewFile * call <SID>SetFullStatusline() | set title titlestring=""
+		au BufLeave,BufNew,BufRead,BufNewFile * call <SID>SetNonStatusline() | set title titlestring=""
 	augroup END
 else
 	augroup Statusline
@@ -88,8 +88,15 @@ fun! s:SetSimpleStatusline() "{{{
 	setlocal statusline=
 	" setlocal statusline+=%#StatuslineNC#%-0.20{StatusLineGetPath()}%0* " path
 	setlocal statusline+=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
-	setlocal statusline+=\/%t\                       " file name
+	setlocal statusline+=		" \/%t\                       " file name
 endfunction "}}}
+
+fun! s:SetNonStatusline() "{{{
+	setlocal statusline=
+	setlocal statusline+=%F%m%r%h%w\
+	setlocal statusline+=%=
+endfunction
+" }}}
 
 " Function used to display utf-8 sequence.
 fun! ShowUtf8Sequence()

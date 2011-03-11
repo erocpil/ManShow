@@ -1,4 +1,4 @@
-" vim: sw=4
+" vim: sw=4:ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " ManShow: based on thegoodluck
 " Vim color file
 " Maintainer:	Leonid Shvechikov (aka tGL) <shvechikov@gmail.com>
@@ -136,7 +136,7 @@ if has('multi_byte_ime')
 endif
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i-ci:ver15-iCursor-blinkwait700-blinkon400-blinkoff250
-set guicursor+=n-v-c:blinkon600-blinkoff300
+set guicursor+=n-v-c:blinkon600-blinkoff450
 " set guicursor+=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175,n-v-c:blinkon0,i-ci:ver30-blinkwait300-blinkon600-blinkoff300
 
 "" Highlight All Math Operator

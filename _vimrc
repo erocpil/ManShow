@@ -1,10 +1,9 @@
-﻿" vim:tw=75:ts=4:ft=vim:foldmethod=expr
-" /*
-"  * Author: lipcore
-"  * Last modified: 星期六 05 二月 2011 01:51:15 下午 中国标准时间
-"  * Description: my personal vim configuration.
-"  * Version:
-"  */
+﻿" vim: sw=4:ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
+" Author: erocpil
+" TimeStamp: 2011-03-06 23:20
+" Filename: _vimrc
+" Description: a personal vim configuration
+" Version:
 
 "" default settings {{{
 if has("win32")
@@ -17,7 +16,7 @@ endif
 
 "" diff {{{
 set diffexpr=MyDiff()
-function MyDiff()
+function! MyDiff()
 	let opt = '-a --binary '
 	if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
 	if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
@@ -60,6 +59,8 @@ if has("multi_byte")
 		set termencoding=utf-8
 		if &fileencoding == ''
 			set fileencoding=chinese
+		else
+			set fileencoding=utf-8
 		endif
 	elseif v:lang =~ "^zh_TW"
 		" Traditional Chinese, on Unix euc-tw, on MS-Windows cp950
@@ -88,7 +89,7 @@ if has("multi_byte")
 		set encoding=utf-8
 	endif
 else
-	echoerr 'Sorry, this version of (g)Vim was not compiled with "multi_byte"'
+	echoerr 'Attention!! This version of (g)Vim was not compiled with "multi_byte"'
 endif
 " encodings END }}}
 
@@ -200,29 +201,28 @@ if has("gui_running")
 		" 等宽英文字体
 		" set guifont=DejaVu_Sans_Mono:h10.875:cANSI
 		set guifont=Monaco:h10.75:cANSI
-		" set guifont=Monaco:h21.5:cANSI
 		" 设置中文字体，微软雅黑需要重新编译 Vim 。
 		set gfw=Microsoft_YaHei:h11
-		" set gfw=Microsoft_YaHei:h22
 		" set guifontwide=YouYuan:h11:cGB2312
 		" set gfw=FZJingLeiS\-R\-GB:h13
 		" set gfw=文泉驿正黑:h12:cGB2312
 		" set gfw=PMingLiU:h12:cGB2312
 		" 针对不同的文件使用不同字体
-		" autocmd BufEnter *.txt set gfw=Microsoft_YaHei:h11
 		autocmd BufEnter *.txt set guifontwide=YouYuan:h11:cGB2312 | setlocal ft=txt
 		autocmd BufEnter * :syntax sync fromstart
 		" 全屏
 		map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 		" ALpha Window
-		map <leader>aw :call libcallnr("vimtweak.dll", "SetAlpha", 168)<cr>
-		map <leader>aW :call libcallnr("vimtweak.dll", "SetAlpha", 255)<cr>
-		" Maximized Window
-		map <leader>mw :call libcallnr("vimtweak.dll", "EnableMaximize", 1)<cr>
-		map <leader>mW :call libcallnr("vimtweak.dll", "EnableMaximize", 0)<cr>
-		" TopMost Window
-		map <leader>et :call libcallnr("vimtweak.dll", "EnableTopMost", 1)<cr>
-		map <leader>eT :call libcallnr("vimtweak.dll", "EnableTopMost", 0)<cr>
+		if executable("vimtweak.dll")
+			map <leader>aw :call libcallnr("vimtweak.dll", "SetAlpha", 168)<cr>
+			map <leader>aW :call libcallnr("vimtweak.dll", "SetAlpha", 255)<cr>
+			" Maximized Window
+			map <leader>mw :call libcallnr("vimtweak.dll", "EnableMaximize", 1)<cr>
+			map <leader>mW :call libcallnr("vimtweak.dll", "EnableMaximize", 0)<cr>
+			" TopMost Window
+			map <leader>et :call libcallnr("vimtweak.dll", "EnableTopMost", 1)<cr>
+			map <leader>eT :call libcallnr("vimtweak.dll", "EnableTopMost", 0)<cr>
+		endif
 	else
 		set guifont=Menlo\ 11
 		set gfw=Microsoft\ YaHei\ 11
@@ -236,6 +236,8 @@ if has("gui_running")
 	" au WinEnter * set cursorline cursorcolumn
 	map <leader>cc :set cursorcolumn <cr>
 	map <leader>cC :set nocursorcolumn <cr>
+	map <leader>c1 :set cc=+1 <cr>
+	map <leader>c2 :set cc= <cr>
 	"" noh
 	map <leader>nh :noh <cr>
 	map <leader>co :colorscheme default<cr>
@@ -276,8 +278,11 @@ if has("gui_running")
 	map <leader>gL :set guioptions-=l<cr>
 	map <leader>gr :set guioptions+=r<cr>
 	map <leader>gR :set guioptions-=r<cr>
+	map <leader>gb :set guioptions+=b<cr>
+	map <leader>gB :set guioptions-=b<cr>
 	" 画图、表
 	map <leader>sk :call ToggleSketch()<CR>
+	" colorscheme ManShow
 	colorscheme Celibate
 	" colorscheme candyman
 	" colorscheme softbluev2
@@ -287,11 +292,12 @@ else
 endif
 " }}}
 
-"" map {{{
+"" Map Groups {{{
 map <leader>q :q<cr>
 " tab
 map <leader>tc :tabc<cr>
-map <leader>ted :tabedit<cr>
+" map <leader>ted :tabedit<cr>
+map <leader>te :tabnew<cr>:e
 map <leader>tf :tabfirst<cr>
 map <leader>tl :tabl<cr>
 map <leader>tm :tabm<cr>
@@ -309,18 +315,22 @@ map <leader>bp :bp<cr>
 map <leader>cw :cw<cr>
 " Fast saving
 nmap <leader>w :w!<cr>
+map <leader>ev :e! $MYVIMRC<cr>
+" others
+map <leader>aa :A<cr>
+map <leader>sw :winsize 100 30<cr>
+map <leader>me :message<cr>
+" list
+map <leader>li :se list<cr>
+map <leader>lI :se nolist<cr>
+" exchange 2 lines
+nmap <C-Down> : <C-u>move .+1<CR>
 " }}}
 
-"" Fast editing of the .vimrc {{{
-if has("win32")
-	map <leader>ev :e! $VIM/_vimrc<cr>
-	"" When vimrc is edited, reload it
-	autocmd! bufwritepost vimrc source $VIM/_vimrc
-else
-	map <leader>ev :e! $HOME/.vimrc<cr>
-	" 这行可以用
-	" autocmd! bufwritepost $VIM/_vimrc source %
-	autocmd! bufwritepost vimrc source ~/.vimrc
+"" When vimrc is edited, reload it {{{
+" autocmd! bufwritepost $VIM/_vimrc source %
+if has('autocmd')
+	autocmd! bufwritepost _vimrc source $MYVIMRC
 endif
 " }}}
 
@@ -384,8 +394,8 @@ set iskeyword+=_,$,@,%,#,-
 "" 语法高亮
 syntax on
 "" 高亮字符，让其不受100列限制
-" highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
-" match OverLength '\%101v.*'
+highlight OverLength ctermbg=red ctermfg=white guibg=red guifg=white
+match OverLength '\%101v.*'
 " Do not redraw, when running macros.. lazyredraw
 set lz
 set magic
@@ -394,6 +404,7 @@ set bsdir=buffer
 set autochdir
 "" 不要备份文件
 set nobackup
+" set backupdir=$HOME/.vim/backup
 "" 不要生成swap文件，当buffer被丢弃的时候隐藏它
 setlocal noswapfile
 set bufhidden=hide
@@ -568,7 +579,7 @@ let g:defaultExplorer = 0
 nmap <C-W><C-F> :FirstExplorerWindow<cr>
 nmap <C-W><C-B> :BottomExplorerWindow<cr>
 " nmap <silent> <F8> :WMToggle<cr>
-map <C-F8> :WMToggle<cr>
+map <F8> :WMToggle<cr>
 " }}}
 
 "" omnicppcomplete {{{
@@ -754,15 +765,16 @@ endfunction
 " }}}
 
 " spell {{{
-" 使用的英文拼写变体为加拿大风格，即使用拼写“abridgement”
-" （而不是"abridgment"）、"colour"（而不是 "color"）等，
-" 比较符合中国人一般的英语教科书中的拼写方式，也比较适合于写“国际”英语。
-let spchkdialect='can'
+" let spchkdialect='can'
+setlocal spell spelllang=en_gb
+" set spell spelllang=en_gb
+set nospell
+map <F3> :set spell!<CR><BAR>:echo "Spell check: " . strpart("OffOn", 3 * &spell, 3)<CR>
 " }}}
 
 "" compile {{{
 " 编译和运行 c 和 cpp 程序
-" 下述代码在windows下使用会报错
+" 下述代码在 windows 下使用会报错
 " 需要去掉 ./ 这两个字符
 if has("unix")
 	" C
@@ -810,16 +822,19 @@ set foldopen -=undo
 " fdm=expr: fde=getline(v\:lnum)=~'.'?1\:0: foldtext=foldtext().v\:folddashes.getline(v\:foldstart+1): foldcolumn=2
 " 去除空行
 " set foldexpr=getline(v:lnum)=~'\\S'&&getline(v:lnum-1)!~'\\S'?'>1':'='
-au FileType txt,vim set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=2
+au FileType fuck set fdm=expr | foldexpr=getline(v:lnum)=~'^\\S!'&&getline(v:lnum-1)!~'\\S'?'>1':'='
+au FileType txt,vim set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=1
 au FileType cpp,c,java set foldmethod=syntax | set foldcolumn=2
-au FileType perl,tex,php,html,css,sh set foldmethod=indent | set foldcolumn=1
+au FileType perl,tex,php,html,css,sh set foldmethod=indent | set foldcolumn=2
 nmap <leader>fc :set foldcolumn=1<cr>
 nmap <leader>fC :set foldcolumn=0<cr>
+" }}}
 
 " 根据邮件的后缀名进行相关的设置。 {{{
 " 如果打开的文件后缀名是'.eml'，则当成邮件处理。
 " http://blah.blogsome.com/2006/04/13/vim_tut_folding/
-autocmd! BufReadPre *.eml se fdm=expr fde=v:lnum==1?1:getline(v:lnum)=~'^$'?0:'=' fdt=Mailfdt(v:foldstart,v:foldend) ft=mail | syn on
+autocmd! BufReadPre *.eml se fdm=expr fde=v:lnum==1?1:getline(v:lnum)=~'^$'?
+			\ 0:'=' fdt=Mailfdt(v:foldstart,v:foldend) ft=mail | syn on
 " 定义函数，用来返回折叠的标题。
 " 以折叠的第一和最后一行的行号为参数
 func! Mailfdt(fst,fen)
@@ -914,7 +929,7 @@ let html_dynamic_folds = 1
 " unlet html_number_lines
 "" 使用 css
 " let html_use_css=1
-"" 生成 html 时忽略代码折叠
+"" 代码折叠
 " let html_ignore_folding=1
 " }}}
 
@@ -1049,7 +1064,7 @@ function! CheckSyntax()
 	execute "copen"
 endfunction
 map <F6> :call CheckSyntax()<CR>
-"}}}
+" }}}
 
 "" VimWiki
 if has("win32")
@@ -1068,7 +1083,7 @@ endif
 "" Remove trailing whitespace when writing a buffer, {{{
 " but not for diff files.
 " From: Vigil
-function RemoveTrailingWhitespace()
+function! RemoveTrailingWhitespace()
 	if &ft != "diff"
 		let b:curcol = col(".")
 		let b:curline = line(".")
@@ -1091,7 +1106,7 @@ map <leader>j gJdw
 " imap ` <ESC>
 " This is totally awesome - remap jj to escape in insert mode.  You'll never type jj anyway, so it's great!
 inoremap jj <Esc>
-nnoremap JJJJ <Nop>
+" nnoremap JJJJ <Nop>
 au FileType cpp,c,perl,html,lisp,java,php,tex,vim,sh imap { {}<ESC>i
 au FileType cpp,c,perl,html,lisp,java,php,tex,vim,sh imap [ []<ESC>i
 au FileType cpp,c,perl,html,lisp,java,php,tex,vim,sh imap ( ()<ESC>i
@@ -1116,8 +1131,6 @@ au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <M-l> <Right>
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-d> <ESC>lxi
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-k> <ESC>ld$a
 au FileType cpp,c,perl,html,lisp,java,php,txt,tex,vim,sh imap <C-o> <ESC>O
-" 和 SignColumn 冲突，先不用这个
-" imap <M-s> <ESC>:w<cr>
 imap <M-q> <ESC>:q<cr>
 " }}}
 
@@ -1172,6 +1185,7 @@ let g:mayansmoke_special_key_visibility = 2  " higher visibility
 imap <C-F5> <ESC>:PreviewClass<CR>a
 
 "" cscope {{{
+nmap <leader>cs :cscope -b -R<cr>
 if has("cscope")
 	" If you want to use Popup menu for :Cscope command, put a line in .vimrc
 	" cscope_quickfix.vim
@@ -1229,44 +1243,6 @@ let otl_use_thlnk=0
 " au BufWinLeave *.otl mkview
 " au BufWinEnter *.otl silent loadview
 let maplocalleader = ","
-" }}}
-
-"" 添加/更新作者信息 {{{
-map <leader>in :call TitleDet()<cr>'s
-function AddTitle()
-	call append(0,"/*")
-	call append(1," * Author: lipcore")
-	call append(2," * Last modified: ".strftime("%Y-%m-%d %H:%M"))
-	call append(3," * Filename: ".expand("%:t"))
-	call append(4," * Description: ")
-	call append(5," * Version: ")
-	call append(6," */")
-	echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
-endf
-function UpdateTitle()
-	"更新最近修改时间和文件名
-	normal m'
-	execute '/# *Last modified:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
-	normal ''
-	normal mk
-	execute '/# *Filename:/s@:.*$@\=": ".expand("%:t")@'
-	execute "noh"
-	normal 'k
-	echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
-endfunction
-function TitleDet()
-	let n=1
-	"默认为添加
-	while n < 5
-		let line = getline(n)
-		if line =~ '^\#\s*\S*Last\smodified:\S*.*$'
-			call UpdateTitle()
-			return
-		endif
-		let n = n + 1
-	endwhile
-	call AddTitle()
-endfunction
 " }}}
 
 "" LastModified {{{
@@ -1336,7 +1312,7 @@ endfunction
 " 		endif
 " 		let time = strftime("%m\\\/%d, %Y")
 " 		" exe "1," . l . "g/Last Updated: /s/Last Updated: .*/Last Updated: yyhuang " . time . "/"
-" 		exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: lipcore " . time . "/"
+" 		exe "1," . l . "g/Last modified: /s/Last modified: .*/Last modified: erocpil " . time . "/"
 " 	endif
 " endfun
 " This autocommand will call LastMod function everytime you save a file
@@ -1344,7 +1320,8 @@ endfunction
 " }}}
 
 "" timestamp.vim {{{
-let timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
+" let timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
+let timestamp_regexp = '\v\C%(<TimeStamp:\s+)@<=.*$'
 " }}}
 
 "" Perl {{{
@@ -1361,10 +1338,38 @@ map <leader>pT <Esc>:!prove -lv % \\| less<CR>
 let perl_extended_vars=1
 set matchpairs+=<:>  " allow % to bounce between angles
 " perl-support
-let g:Perl_AuthorName      = 'lipcore'
+let g:Perl_AuthorName      = 'erocpil'
 let g:Perl_AuthorRef       = 'http://lxh.heliohost.org/'
 let g:Perl_Email           = 'erocpil@gmail.com'
-let g:Perl_Company         = 'lipcore'
+let g:Perl_Company         = 'erocpil'
+" Create new subroutines
+" http://vim.wikia.com/wiki/Create_new_subroutines
+nnoremap <Leader>ns :call Newsub()<CR>
+function! Newsub()
+	let word = "sub " . expand("<cword>") . "{}"
+	let ln = search("__.*__", 'nW')
+	if ln == 0
+		call append('$', word)
+	else
+		call append(ln-1, word)
+	endif
+endfunction
+" Open a Perl module
+" http://vim.wikia.com/wiki/Open_a_Perl_module_from_its_module_name
+nnoremap <Leader>pm :call LoadPerlModule()<CR>
+function! LoadPerlModule()
+	execute 'e `perldoc -l ' . expand("<cWORD>") . '`'
+endfunction
+" Reindent by perltidy
+" au FileType perl set equalprg=perltidy
+if &ft=="perl"
+	if has("unix")
+		executable("/usr/local/bin/perltidy")
+	endif
+	set equalprg=perltidy
+else
+	set equalprg=
+endif
 " }}}
 
 "" Open URL in browser {{{
@@ -1373,7 +1378,7 @@ function! Browser ()
 	let line = matchstr (line, "http[^'   ]*")
 	silent exec "!E:\\Software\\FirefoxPortable\\FirefoxPortable.exe ".line
 endfunction
-"}}}
+" }}}
 
 "" Open Url on this line with the browser \w {{{
 map <Leader>url :call Browser ()<CR>
@@ -1466,8 +1471,8 @@ nnoremap <leader>par :%s/^>$//<CR>
 " :Calc sum(range(1,100+1)), "Gauss' famous identity sum(1,100)"
 " 5050
 if has('python')
-	:command! -nargs=+ Calc :py print <args>
-	:py from cmath import *
+	command! -nargs=+ PyCalc :py print <args>
+	py from cmath import *
 endif
 " }}}
 
@@ -1516,13 +1521,13 @@ map <leader>k :call OnlineDoc()<CR>
 if has("win32")
 	nmap <C-F11> :!start explorer /e,/select, %:p<CR>
 	imap <C-F11> <Esc><F6>
-	command -nargs=0 Explor :!start explorer /e,/select, %:p
-	command -nargs=0 Explorer :!start explorer /e,/select, %:p
+	command! -nargs=0 Explor :!start explorer /e,/select, %:p
+	command! -nargs=0 Explorer :!start explorer /e,/select, %:p
 endif
 " }}}
 
 " get week day string in chinese. {{{
-function Week_cn()
+function! Week_cn()
 	return "星期".strpart("日一二三四五六", strftime("%w")*3, 3)
 endfunction
 " }}}
@@ -1533,20 +1538,29 @@ nmap <leader>d :!curl dict://dict.org/d:<cword><CR><CR>
 " }}}
 
 "" signs {{{
-nmap <M-g> :call sjump#JumpToLabel()<cr>
+" nmap <M-g> :call sjump#JumpToLabel()<cr>
 if has('signs')
 	if has('win32')
-		"" SignColumn
-		sign define scc text=>> texthl=SignColumn linehl=Search
+		"" SignColumn〠〄†
+		sign define scc text=<> texthl=SignColumn linehl=Search
+		sign define sc- text=-> texthl=SignColumn linehl=NonText
+		sign define sc> text=>> texthl=SignColumn linehl=Folded
 		sign define siv text=-> icon=e:/Software/Vim/Icons/vim.xpm texthl=SignColumn linehl=ModeMsg
 		sign define sir text=-> icon=e:/Software/Vim/Icons/apple-red.xpm texthl=SignColumn linehl=ErrorMsg
 		sign define sig text=-> icon=e:/Software/Vim/Icons/apple-green.xpm texthl=SignColumn linehl=Question
 		sign define sid text=-> icon=e:/Software/Vim/Icons/debian-logo.xpm texthl=SignColumn linehl=IncSearch
 		sign define sia text=-> icon=e:/Software/Vim/Icons/gnome-aorta.xpm texthl=SignColumn linehl=StatusLine
-		sign define sie text=-> icon=e:/Software/Vim/Icons/gnome-emacs.xpm texthl=SignColumn linehl=Visual
-		sign define sip text=-> icon=e:/Software/Vim/Icons/gnome-gimp.xpm texthl=SignColumn linehl=VisualNOS
-		sign define siu text=-> icon=e:/Software/Vim/Icons/gnome-suse.xpm texthl=SignColumn linehl=Directory
-		sign define sii text=-> icon=e:/Software/Vim/Icons/iceweasel.xpm texthl=SignColumn linehl=LineNr
+		sign define sin text=-> icon=e:/Software/Vim/Icons/gnome-emacs.xpm texthl=SignColumn linehl=Visual
+		sign define sim text=-> icon=e:/Software/Vim/Icons/gnome-gimp.xpm texthl=SignColumn linehl=VisualNOS
+		sign define sis text=-> icon=e:/Software/Vim/Icons/gnome-suse.xpm texthl=SignColumn linehl=Directory
+		sign define sii text=-> icon=e:/Software/Vim/Icons/iceweasel.xpm texthl=SignColumn linehl=DiffText
+		sign define siu text=-> icon=e:/Software/Vim/Icons/Ubuntu.xpm texthl=SignColumn linehl=DiffDelete
+		sign define sih text=-> icon=e:/Software/Vim/Icons/Redhat.xpm texthl=SignColumn linehl=DiffAdd
+		sign define sif text=-> icon=e:/Software/Vim/Icons/firefox.xpm texthl=SignColumn linehl=DiffChange
+		sign define sio text=-> icon=e:/Software/Vim/Icons/Gentoo.xpm texthl=SignColumn linehl=perlSpecialString
+		sign define sie text=-> icon=e:/Software/Vim/Icons/emacs.xpm texthl=SignColumn linehl=perlSpecialMatch
+		sign define sit text=-> icon=e:/Software/Vim/Icons/Thunderbird.xpm texthl=SignColumn linehl=perlSubstitutionGQQ
+		sign define sip text=-> icon=e:/Software/Vim/Icons/camel_head.xpm texthl=SignColumn linehl=perlVarPlain
 		" sign define sig icon=e:/Software/Vim/Icons/.xpm texthl=SignColumn linehl=Question
 		" sign place {id} line={lnum} name={name} file={fname}
 		" sign place {id} line={lnum} name={name} buffer={nr}
@@ -1556,21 +1570,28 @@ if has('signs')
 		" sign jump {id} buffer={nr}
 	else
 		sign define scc text=〠 texthl=SignColumn linehl=Search
-		sign define sch text=☯☎ texthl=SignColumn linehl=Search
-		sign define sct text=〄 texthl=SignColumn linehl=Search
+		sign define sc- text=☯☎ texthl=SignColumn linehl=NonText
+		sign define sc> text=〄 texthl=SignColumn linehl=Folded
 		sign define siv text=♥ icon=/root/Media/Icons/vim.png texthl=SignColumn linehl=ModeMsg
 		sign define sir text=♥ icon=/root/Media/Icons/apple-red.png texthl=SignColumn linehl=ErrorMsg
 		sign define sig text=♥ icon=/root/Media/Icons/apple-green.png texthl=SignColumn linehl=Question
 		sign define sid text=♥ icon=/root/Media/Icons/debian-logo.png texthl=SignColumn linehl=IncSearch
 		sign define sia text=♥ icon=/root/Media/Icons/gnome-aorta.png texthl=SignColumn linehl=StatusLine
-		sign define sie text=♥ icon=/root/Media/Icons/gnome-emacs.png texthl=SignColumn linehl=Visual
-		sign define sip text=♥ icon=/root/Media/Icons/gnome-gimp.png texthl=SignColumn linehl=VisualNOS
-		sign define siu text=♥ icon=/root/Media/Icons/gnome-suse.png texthl=SignColumn linehl=Directory
+		sign define sin text=♥ icon=/root/Media/Icons/gnome-emacs.png texthl=SignColumn linehl=Visual
+		sign define sim text=♥ icon=/root/Media/Icons/gnome-gimp.png texthl=SignColumn linehl=VisualNOS
+		sign define sis text=♥ icon=/root/Media/Icons/gnome-suse.png texthl=SignColumn linehl=Directory
 		sign define sii text=♥ icon=/root/Media/Icons/iceweasel.png texthl=SignColumn linehl=LineNr
+		sign define siu text=〄 icon=/root/Media/Icons/Ubuntu.png texthl=SignColumn linehl=DiffDelete
+		sign define sih text=〄 icon=/root/Media/Icons/Redhat.png texthl=SignColumn linehl=DiffAdd
+		sign define sif text=〄 icon=/root/Media/Icons/firefox.png texthl=SignColumn linehl=DiffChange
+		sign define sio text=〄 icon=/root/Media/Icons/Gentoo.png texthl=SignColumn linehl=perlSpecialString
+		sign define sie text=〄 icon=/root/Media/Icons/emacs.png texthl=SignColumn linehl=perlSpecialMatch
+		sign define sit text=〄 icon=/root/Media/Icons/Thunderbird.png texthl=SignColumn linehl=perlSubstitutionGQQ
+		sign define sip text=〄 icon=/root/Media/Icons/camel_head.png texthl=SignColumn linehl=perlVarPlain
 	endif
 	nmap <leader>scc :exe ":sign place 1 line=" . line('.') . " name=scc file=" . expand("%:p")<cr>
-	nmap <leader>sch :exe ":sign place 1 line=" . line('.') . " name=sch file=" . expand("%:p")<cr>
-	nmap <leader>sct :exe ":sign place 1 line=" . line('.') . " name=sct file=" . expand("%:p")<cr>
+	nmap <leader>sc- :exe ":sign place 1 line=" . line('.') . " name=sc- file=" . expand("%:p")<cr>
+	nmap <leader>sc> :exe ":sign place 1 line=" . line('.') . " name=sc> file=" . expand("%:p")<cr>
 	nmap <leader>jsc :exe ":sign jump 1 file=" . expand("%:p")<cr>
 	nmap <leader>sv :exe ":sign place 2 line=" . line('.') . " name=siv file=" . expand("%:p")<cr>
 	nmap <leader>jsv :exe ":sign jump 2 file=" . expand("%:p")<cr>
@@ -1582,14 +1603,28 @@ if has('signs')
 	nmap <leader>jsd :exe ":sign jump 5 file=" . expand("%:p")<cr>
 	nmap <leader>sa :exe ":sign place 6 line=" . line('.') . " name=sia file=" . expand("%:p")<cr>
 	nmap <leader>jsa :exe ":sign jump 6 file=" . expand("%:p")<cr>
-	nmap <leader>se :exe ":sign place 7 line=" . line('.') . " name=sie file=" . expand("%:p")<cr>
-	nmap <leader>jse :exe ":sign jump 7 file=" . expand("%:p")<cr>
-	nmap <leader>sp :exe ":sign place 8 line=" . line('.') . " name=sip file=" . expand("%:p")<cr>
-	nmap <leader>jsp :exe ":sign jump 8 file=" . expand("%:p")<cr>
-	nmap <leader>su :exe ":sign place 9 line=" . line('.') . " name=siu file=" . expand("%:p")<cr>
-	nmap <leader>jsu :exe ":sign jump 9 file=" . expand("%:p")<cr>
+	nmap <leader>sn :exe ":sign place 7 line=" . line('.') . " name=sin file=" . expand("%:p")<cr>
+	nmap <leader>jsn :exe ":sign jump 7 file=" . expand("%:p")<cr>
+	nmap <leader>sm :exe ":sign place 8 line=" . line('.') . " name=sim file=" . expand("%:p")<cr>
+	nmap <leader>jsm :exe ":sign jump 8 file=" . expand("%:p")<cr>
+	nmap <leader>ss :exe ":sign place 9 line=" . line('.') . " name=sis file=" . expand("%:p")<cr>
+	nmap <leader>jss :exe ":sign jump 9 file=" . expand("%:p")<cr>
 	nmap <leader>si :exe ":sign place 10 line=" . line('.') . " name=sii file=" . expand("%:p")<cr>
 	nmap <leader>jsi :exe ":sign jump 10 file=" . expand("%:p")<cr>
+	nmap <leader>su :exe ":sign place 11 line=" . line('.') . " name=siu file=" . expand("%:p")<cr>
+	nmap <leader>jsu :exe ":sign jump 11 file=" . expand("%:p")<cr>
+	nmap <leader>sh :exe ":sign place 12 line=" . line('.') . " name=sih file=" . expand("%:p")<cr>
+	nmap <leader>jsh :exe ":sign jump 12 file=" . expand("%:p")<cr>
+	nmap <leader>sf :exe ":sign place 13 line=" . line('.') . " name=sif file=" . expand("%:p")<cr>
+	nmap <leader>jsf :exe ":sign jump 13 file=" . expand("%:p")<cr>
+	nmap <leader>so :exe ":sign place 14 line=" . line('.') . " name=sio file=" . expand("%:p")<cr>
+	nmap <leader>jso :exe ":sign jump 14 file=" . expand("%:p")<cr>
+	nmap <leader>se :exe ":sign place 15 line=" . line('.') . " name=sie file=" . expand("%:p")<cr>
+	nmap <leader>jse :exe ":sign jump 15 file=" . expand("%:p")<cr>
+	nmap <leader>st :exe ":sign place 16 line=" . line('.') . " name=sit file=" . expand("%:p")<cr>
+	nmap <leader>jst :exe ":sign jump 16 file=" . expand("%:p")<cr>
+	nmap <leader>sp :exe ":sign place 17 line=" . line('.') . " name=sip file=" . expand("%:p")<cr>
+	nmap <leader>jsp :exe ":sign jump 17 file=" . expand("%:p")<cr>
 	" ♥☎撤销所有的标号放置
 	" sign unplace *
 	nmap <leader>sS :sign unplace *<cr>
@@ -1650,7 +1685,7 @@ endif
 " }}}
 
 "" 取光标下的单词在新窗口中打开 {{{
-function Open_new_tab_and_tags_locate_cursor_word()
+function! Open_new_tab_and_tags_locate_cursor_word()
 	let word=expand('<cword>')
 	execute "tabedit"
 	execute "edit ."
@@ -1735,7 +1770,7 @@ let g:indent_guides_guide_size = 1
 " pathogen#glob: wrapper around glob() that returns an array
 " pathogen#runtime_prepend_subdirectories: prepend all subdirectories of a path to the runtimepath and append all after subsubdirectories
 " pathogen#runtime_append_all_bundles: for each directory in the runtime path, look for a "bundle" entry and add the subdirectories of it to the path, as with runtime_prepend_subdirectories
-call pathogen#runtime_append_all_bundles()
+" call pathogen#runtime_append_all_bundles()
 " }}}
 
 " inoremap ( ()<ESC>i
@@ -1751,6 +1786,88 @@ endfunction
 "" select & search
 vnoremap <silent> <leader>/ y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
 vnoremap <silent> <leader>? y?<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
+
+"" Comment Lines according to a given filetype {{{
+" http://vim.wikia.com/wiki/Comment_Lines_according_to_a_given_filetype
+" comment out highlighted lines according to file type
+" put a line like the following in your ~/.vim/filetype.vim file
+" and remember to turn on filetype detection: filetype on
+" au! BufRead,BufNewFile *.sh,*.tcl,*.php,*.pl let Comment="#"
+" if the comment character for a given filetype happens to be @
+" then use let Comment="\@" to avoid problems...
+" au BufRead,BufNewFile *.inc,*.ihtml,*.html,*.tpl,*.class set filetype=php
+"         \ | let Comment="<!-- " | let EndComment=" -->"
+au FileType sh,perl,tcl let Comment="# " | let EndComment=""
+" au BufRead,BufNewFile *.js set filetype=html | let Comment="//" | let EndComment=""
+au FileType php let Comment="<!-- " | let EndComment=" -->"
+au FileType cpp let Comment="// " | let EndComment=""
+au FileType c let Comment="/* " | let EndComment=" */"
+au FileType vim let Comment="\" " | let EndComment=""
+function! CommentLines()
+	"let Comment="#" " shell, tcl, php, perl
+	exe ":silent s@^@".g:Comment."@g"
+	exe ":silent s@$@".g:EndComment."@g"
+endfun
+" map visual mode keycombo 'co' to this function
+vmap <leader>cm :call CommentLines()<CR>
+" }}}
+
+"" 添加/更新作者信息 {{{
+map <leader>in :call TitleDet()<cr>'s
+function! AddTitle()
+	call append(0,g:Comment."Author: erocpil".g:EndComment)
+	call append(1,g:Comment."Last modified: ".strftime("%Y-%m-%d %H:%M").g:EndComment)
+	call append(2,g:Comment."Filename: ".expand("%:t").g:EndComment)
+	call append(3,g:Comment."Description: ".g:EndComment)
+	call append(4,g:Comment."Version: ".g:EndComment)
+	echohl WarningMsg | echo "Successful in adding the copyright." | echohl None
+endf
+function! UpdateTitle()
+	"更新最近修改时间和文件名
+	normal m'
+	execute '/# *Last modified:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+	normal ''
+	normal mk
+	execute '/# *Filename:/s@:.*$@\=": ".expand("%:t")@'
+	execute "noh"
+	normal 'k
+	echohl WarningMsg | echo "Successful in updating the copy right." | echohl None
+endfunction
+function! TitleDet()
+	let n=1
+	"默认为添加
+	while n < 5
+		let line = getline(n)
+		if line =~ '^\#\s*\S*Last\smodified:\S*.*$'
+			call UpdateTitle()
+			return
+		endif
+		let n = n + 1
+	endwhile
+	call AddTitle()
+endfunction
+" }}}
+
+"" Session {{{
+set sessionoptions+=unix,slash
+" }}}
+
+"" 自动高亮光标所在单词
+" autocmd CursorMoved * silent! exe printf('match IncSearch /\<%s\>/', expand('<cword>'))
+
+"" MiniBufExplorer {{{
+let g:miniBufExplVSplit = 20
+let g:miniBufExplSplitBelow=1
+map <Leader>mt :TMiniBufExplorer<cr>
+" }}}
+
+" SaveSession {{{
+" :let g:session_autoload = 0
+" }}}
+
+"" astyle {{{
+autocmd BufNewFile,BufRead *.c,*.cpp set formatprg=astyle\ -T8pbA8
+" }}}
 
 " goto the last line when you reopen a file {{{
 au BufReadPost * if line("'\"")>0 |

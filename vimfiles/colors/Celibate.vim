@@ -1,10 +1,8 @@
-" /*
-"  * Author: lipcore
-"  * Last modified: 星期六 05 二月 2011 11:39:49 上午 中国标准时间
-"  * Filename: Celibate.vim
-"  * Description:
-"  * Version:
-"  */
+" Author: lipcore
+" TimeStamp: 2011-03-06 23:18
+" Filename: Celibate.vim
+" Description:
+" Version:
 
 " set background=light
 set background=dark
@@ -34,7 +32,7 @@ hi Type			                    guifg=#80C97F   ctermfg=LightCyan   ctermbg=none  
 " hi SignColumn       guibg=Black     guifg=#FF9911
 "
 " hi SignColumn	guifg=Blue	guibg=White
-hi SignColumn	guifg=Blue	guibg=Black
+hi SignColumn	guifg=Red	guibg=Black
 hi Todo			    guibg=yellow2   guifg=orangered ctermfg=Brown       ctermbg=Yellow
 " hi Ignore 		                    guifg=grey20 	ctermfg=DarkGrey    ctermbg=none
 " hi ModeMsg 		                    guifg=#80C9FF   ctermfg=Blue        ctermbg=none        cterm=bold      term=bold   gui=bold
@@ -90,7 +88,7 @@ hi Search			guibg=#804000   guifg=#FF9911   ctermfg=DarkRed     ctermbg=Brown   
 " hi FoldColumn 		guibg=#9A32CD	guifg=#8ae234	ctermfg=White       ctermbg=DarkBlue    term=standout
 "
 " hi FoldColumn 		guibg=#ECECEC	guifg=#8ae234	ctermfg=White       ctermbg=DarkBlue    term=standout
-hi FoldColumn 		guibg=Grey25	guifg=#8ae234	ctermfg=White       ctermbg=DarkBlue    term=standout
+hi FoldColumn 		guibg=Grey25	guifg=#0088FF	ctermfg=White       ctermbg=DarkBlue    term=standout
 
 "
 " hi Visual 		    guibg=#25345F   guifg=#647C95   ctermfg=White       ctermbg=none        term=bold       cterm=bold      gui=none
@@ -101,6 +99,8 @@ hi VisualNOS 		guibg=#25345F   guifg=#526A83   ctermfg=White       ctermbg=none 
 " hi DiffAdd 		    guibg=#FFB720   guifg=White	    gui=bold
 " hi DiffChange 		guibg=#D26C00		            gui=underline
 " hi DiffDelete 		guibg=#AA4400   guifg=#DDDDDD   gui=bold
+
+hi SpellBad	term=underline	cterm=underline	ctermfg=red	gui=underline,bold	guifg=Red
 
 hi perlMatch			guifg=#FF99FF   guibg=Grey5	ctermfg=Brown       ctermbg=Black
 hi perlSubstitutionGQQ	guifg=#FF99AA   guibg=Grey25	ctermfg=Brown       ctermbg=Black
@@ -185,8 +185,8 @@ if has('multi_byte_ime')
 	highlight CursorIM guifg=NONE guibg=Purple
 endif
 set guicursor=n-v-c:block-Cursor
-set guicursor+=i-ci:ver15-iCursor-blinkwait700-blinkon400-blinkoff250
-set guicursor+=n-v-c:blinkon0
+set guicursor+=i-ci:ver15-iCursor-blinkwait700-blinkon400-blinkoff200
+set guicursor+=n-v-c:blinkon600-blinkoff200
 " set guicursor+=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175,n-v-c:blinkon0,i-ci:ver30-blinkwait300-blinkon600-blinkoff300
 
 "" Highlight All Math Operator
