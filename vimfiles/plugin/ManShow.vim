@@ -1,6 +1,6 @@
 " vim: ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " Author: lipcore
-" TimeStamp: 星期三 02 二月 2011 06:06:22 下午 中国标准时间
+" TimeStamp: 星期四 19 五月 2011 10:56:51 下午 中国标准时间
 " Filename: ManShow.vim
 " Description:
 "
@@ -77,7 +77,7 @@ fun! s:SetFullStatusline() "{{{
 	"" take too much space, added to titlestring
 	" setlocal statusline+=%#FileInfo#%{FileTime()}
 	setlocal statusline+=%#StatuslineChar#%-2B%0*								" current char
-	setlocal statusline+=%#StatuslinePosition#\%l\ %c-%v						" position
+	setlocal statusline+=%#StatuslinePosition#%c-%v\ \%l						" position
 	setlocal statusline+=%#StatuslinePercent#\%L\ %P							" position percentage
 	setlocal statusline+=%#StatuslineCapsBuddy#%{exists('*CapsLockSTATUSLINE')?CapsLockSTATUSLINE():''}	"Caps
 	setlocal statusline+=%#StatuslineCapsBuddy#%{VimBuddy()}					"Buddy
