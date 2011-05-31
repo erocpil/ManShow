@@ -1,6 +1,6 @@
 ﻿" vim: sw=4:ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " Author: erocpil
-" TimeStamp: 2011-03-06 23:20
+" TimeStamp: 星期日 29 五月 2011 10:31:35 下午 中国标准时间
 " Filename: _vimrc
 " Description: a personal vim configuration
 " Version:
@@ -11,6 +11,9 @@ if has("win32")
 	source $VIMRUNTIME/mswin.vim
 	behave mswin
 else
+	source $VIMRUNTIME/vimrc_example.vim
+	source $VIMRUNTIME/mswin.vim
+	behave mswin
 endif
 " }}}
 
@@ -41,7 +44,7 @@ function! MyDiff()
 endfunction
 " }}}
 
-"" encoding {{{
+"" 编码 {{{
 " Multi-encoding setting, MUST BE IN THE BEGINNING OF .vimrc!
 if has("multi_byte")
 	set nolinebreak
@@ -103,7 +106,6 @@ set helplang=cn
 
 "" 解决乱码 {{{
 if has("win32")
-	" 指定菜单语言
 	" set langmenu=none
 	" 解决菜单乱码
 	set langmenu=zh_CN.utf-8
@@ -136,8 +138,24 @@ endif
 " endfunction
 " set balloonexpr=SimpleBalloon()
 " set ballooneval
+"" 显示翻译结果，目前只对单词有效。 {{{
+" function! GoTr()
+" 	if has('win32')
+" 		let lines = g:PyGoogleTranslate(expand('<cword>'),1)
+" 		if &encoding == "utf-8"
+" 			return iconv( lines, "utf-8", "cp936")
+" 		else
+" 			return join( lines, has( "balloon_multiline" ) ? "\n" : " " )
+" 		endif
+" 	else
+" 		return join( lines, has( "balloon_multiline" ) ? "\n" : " " )
+" 	endif
+" endfunction
+" set balloonexpr=GoTr()
+" set ballooneval
+" }}}
 
-"" a more advanced example, to activate it, just turn on the spell check:
+"" a more advanced example, to activate it, just turn on the spell check: {{{
 "" :set spell
 function! FoldSpellBalloon()
 	let foldStart = foldclosed(v:beval_lnum )
@@ -185,6 +203,7 @@ endfunction
 set balloonexpr=FoldSpellBalloon()
 set ballooneval
 set balloondelay=100
+" }}}
 " Balloon ends }}}
 
 " turn off nice effect on status bar title {{{
@@ -212,8 +231,8 @@ if has("gui_running")
 		autocmd BufEnter * :syntax sync fromstart
 		" 全屏
 		map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
-		" ALpha Window
 		if executable("vimtweak.dll")
+			" Alpha Window
 			map <leader>aw :call libcallnr("vimtweak.dll", "SetAlpha", 168)<cr>
 			map <leader>aW :call libcallnr("vimtweak.dll", "SetAlpha", 255)<cr>
 			" Maximized Window
@@ -268,22 +287,37 @@ if has("gui_running")
 	set guioptions-=R
 	"" map
 	" 菜单栏
-	map <leader>gm :set guioptions+=m<cr>
-	map <leader>gM :set guioptions-=m<cr>
+	map <silent> <leader>gm :if &guioptions =~# 'm' <Bar>
+				\set guioptions-=m <Bar>
+				\else <Bar>
+				\set guioptions+=m <Bar>
+				\endif<CR>
 	" 工具栏
-	map <leader>gT :set guioptions+=T<cr>
-	map <leader>gt :set guioptions-=T<cr>
+	map <silent> <leader>gt :if &guioptions =~# 'T' <Bar>
+				\set guioptions-=T <Bar>
+				\else <Bar>
+				\set guioptions+=T <Bar>
+				\endif<CR>
 	" 滚动条
-	map <leader>gl :set guioptions+=l<cr>
-	map <leader>gL :set guioptions-=l<cr>
-	map <leader>gr :set guioptions+=r<cr>
-	map <leader>gR :set guioptions-=r<cr>
-	map <leader>gb :set guioptions+=b<cr>
-	map <leader>gB :set guioptions-=b<cr>
+	map <silent> <leader>gl :if &guioptions =~# 'l' <Bar>
+				\set guioptions-=l <Bar>
+				\else <Bar>
+				\set guioptions+=l <Bar>
+				\endif<CR>
+	map <silent> <leader>gr :if &guioptions =~# 'r' <Bar>
+				\set guioptions-=r <Bar>
+				\else <Bar>
+				\set guioptions+=r <Bar>
+				\endif<CR>
+	map <silent> <leader>gb :if &guioptions =~# 'b' <Bar>
+				\set guioptions-=b <Bar>
+				\else <Bar>
+				\set guioptions+=b <Bar>
+				\endif<CR>
 	" 画图、表
 	map <leader>sk :call ToggleSketch()<CR>
 	" colorscheme ManShow
-	colorscheme Celibate
+	colorscheme thegoodluck
 	" colorscheme candyman
 	" colorscheme softbluev2
 else
@@ -305,6 +339,7 @@ map <leader>tw :tabnew<cr>
 map <leader>tn :tabnext<cr>
 map <leader>tN :tabNext<cr>
 map <leader>tp :tabp<cr>
+map <leader>to :tabonly<cr>
 map <leader>bd :bd<cr>
 map <leader>vn :vnew<cr>
 map <leader>hs :split<cr>
@@ -325,6 +360,9 @@ map <leader>li :se list<cr>
 map <leader>lI :se nolist<cr>
 " exchange 2 lines
 nmap <C-Down> : <C-u>move .+1<CR>
+" StatusLine
+nmap <leader>sx :set statusline=<cr>
+nmap <M-O> o<esc>
 " }}}
 
 "" When vimrc is edited, reload it {{{
@@ -372,6 +410,7 @@ set history=500
 set confirm
 "" 与windows共享剪贴板
 set clipboard+=unnamed
+set clipboard+=unnamedplus
 "" 侦测文件类型
 filetype on
 "" 载入文件类型插件
@@ -381,9 +420,9 @@ filetype indent on
 " Set to auto read when a file is changed from the outside
 " set autoread
 "" 设置C/C++语言的具体缩进方式（windows风格）
-set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
-
-"" viminfo {{{
+" set cinoptions={0,1s,t0,n-2,p2s,(03s,=.5s,>1s,=1s,:1s
+set cinoptions=>4,e0,n0,f0,{0,}0,^0,:s,=s,l0,gs,hs,ps,ts,+s,c3,C0,(2s,us,U0,w0,m0,j0,)20,*30
+" viminfo
 " set viminfo+=!
 set viminfo='1000,f1,<500,n$VIM\\_viminfo
 " }}}
@@ -499,18 +538,19 @@ set noexpandtab
 " set nowrap
 " 在行和段开始处使用制表符
 set smarttab
-"" 断行设置
 " 不要在单词中间断行
 set lbr
 " }}}
 
 "" CTags {{{
 if has('win32')
-	set tags+=D:/dev/gtk/tags
-	set path+=D:/dev/gtk/include/,D:/dev/gtk/include/*
-	set tags+=D:/Qt/qt/include/tags
-	set tags+=D:/Qt/qt/src/tags
-	set path+=D:/Qt/qt/include,D:/Qt/qt/include/*,D:/Qt/qt/src/,D:/Qt/qt/src/*,D:/Qt/qt/,D:/Qt/qt/*
+	set tags+=D:/dev/gtkmm/include/tags
+	set path+=D:/dev/gtkmm/include/,D:/dev/gtkmm/include/*
+	" 	set tags+=D:/Qt/qt/include/tags
+	" 	set tags+=D:/Qt/qt/src/tags
+	" 	set path+=D:/Qt/qt/include,D:/Qt/qt/include/*,D:/Qt/qt/src/,D:/Qt/qt/src/*,D:/Qt/qt/,D:/Qt/qt/*
+	" 	set tags+=D:/dev/codeblocks/build/gcc/include/tags
+	" 	set path+=D:/dev/codeblocks/build/gcc/include/:D:/dev/codeblocks/build/gcc/include/*
 else
 	set tags+=/opt/qtsdk/qt/include/tags
 	set tags+=/opt/qtsdk/qt/src/tags
@@ -600,6 +640,7 @@ let OmniCpp_MayCompleteScope = 1
 "" NERDTreeToggle{{{
 " imap <silent> <F7> <esc>:NERDTreeToggle<CR>
 nmap <silent> <leader>nt :NERDTreeToggle<CR>
+let g:NERDTreeQuitOnOpen=1
 " NERD Commenter
 let NERDSpaceDelims = 1
 map <M-/> <Plug>NERDCommenterToggle
@@ -823,7 +864,7 @@ set foldopen -=undo
 " 去除空行
 " set foldexpr=getline(v:lnum)=~'\\S'&&getline(v:lnum-1)!~'\\S'?'>1':'='
 au FileType fuck set fdm=expr | foldexpr=getline(v:lnum)=~'^\\S!'&&getline(v:lnum-1)!~'\\S'?'>1':'='
-au FileType txt,vim set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=1
+au FileType txt,vim,lisp set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=1
 au FileType cpp,c,java set foldmethod=syntax | set foldcolumn=2
 au FileType perl,tex,php,html,css,sh set foldmethod=indent | set foldcolumn=2
 nmap <leader>fc :set foldcolumn=1<cr>
@@ -1321,7 +1362,7 @@ let maplocalleader = ","
 
 "" timestamp.vim {{{
 " let timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
-let timestamp_regexp = '\v\C%(<TimeStamp:\s+)@<=.*$'
+let timestamp_regexp = '\v\C%(<(TimeStamp|Time-[Ss]tamp):\s+)@<=.*$'
 " }}}
 
 "" Perl {{{
@@ -1541,7 +1582,7 @@ nmap <leader>d :!curl dict://dict.org/d:<cword><CR><CR>
 " nmap <M-g> :call sjump#JumpToLabel()<cr>
 if has('signs')
 	if has('win32')
-		"" SignColumn〠〄†
+		"" SignColumn〠〄†※
 		sign define scc text=<> texthl=SignColumn linehl=Search
 		sign define sc- text=-> texthl=SignColumn linehl=NonText
 		sign define sc> text=>> texthl=SignColumn linehl=Folded
@@ -1735,7 +1776,69 @@ set grepprg=grep\ -nH
 
 "" guitable {{{
 " let &guitablabel = "%{FileInfo()}\ %{getcwd()}\ "
+function! InfoGuiTooltip()
+	"get window count
+	let wincount = tabpagewinnr(tabpagenr(),'$')
+	let bufferlist=''
+	" get name of active buffers in windows
+	for i in tabpagebuflist()
+		let bufferlist .= '['.fnamemodify(bufname(i),':t').'] '
+	endfor
+	return bufname($).' windows: '.wincount.' ' .bufferlist ' '
+endfunction
 let &guitabtooltip = "%{FileInfo()}\ %{getcwd()}\ "
+" let guitabtooltip = "%!InfoGuiTooltip()"
+function! ShortTabLine()
+	let ret = ''
+	for i in range(tabpagenr('$'))
+		" select the color group for highlighting active tab
+		if i + 1 == tabpagenr()
+			let ret .= '%#errorMsg#'
+		else
+			let ret .= '%#TabLine#'
+		endif
+		" find the buffername for the tablabel
+		let buflist = tabpagebuflist(i+1)
+		let winnr = tabpagewinnr(i+1)
+		let buffername = bufname(buflist[winnr - 1])
+		let filename = fnamemodify(buffername,':t')
+		" check if there is no name
+		if filename == ''
+			let filename = 'noname'
+		endif
+		" only show the first 6 letters of the name  and
+		" .. if the filename is more than 8 letters long
+		if strlen(filename) >=8
+			let ret .= '['. filename[0:5].'..]'
+		else
+			let ret .= '['.filename.']'
+		endif
+	endfor
+	" after the last tab fill with TabLineFill and reset tab page #
+	let ret .= '%#TabLineFill#%T'
+	return ret
+endfunction
+set tabline=%!ShortTabLine()
+function! ShortTabLabel()
+	let bufnrlist = tabpagebuflist(v:lnum)
+	" show only the first 6 letters of the name � ..
+	let label = bufname(bufnrlist[tabpagewinnr(v:lnum) - 1])
+	let filename = fnamemodify(label,':h')
+	" only add .. if string is more than 8 letters
+	if strlen(filename) >=8
+		let ret=filename[0:5].'..'
+	else
+		let ret = filename
+	endif
+	return ret
+endfunction
+" let &guitablabel = "%{ShortTabLabel()}"
+" }}}
+
+"" abbriviations {{{
+iabbr teh the
+cabbr csc colorscheme Celibate
+cabbr so syntax on
 " }}}
 
 "" default filetype {{{
@@ -1816,7 +1919,7 @@ vmap <leader>cm :call CommentLines()<CR>
 map <leader>in :call TitleDet()<cr>'s
 function! AddTitle()
 	call append(0,g:Comment."Author: erocpil".g:EndComment)
-	call append(1,g:Comment."Last modified: ".strftime("%Y-%m-%d %H:%M").g:EndComment)
+	call append(1,g:Comment."TimeStamp: ".strftime("%Y-%m-%d %H:%M").g:EndComment)
 	call append(2,g:Comment."Filename: ".expand("%:t").g:EndComment)
 	call append(3,g:Comment."Description: ".g:EndComment)
 	call append(4,g:Comment."Version: ".g:EndComment)
@@ -1825,7 +1928,7 @@ endf
 function! UpdateTitle()
 	"更新最近修改时间和文件名
 	normal m'
-	execute '/# *Last modified:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
+	execute '/# *TimeStamp:/s@:.*$@\=strftime(": %Y-%m-%d %H:%M")@'
 	normal ''
 	normal mk
 	execute '/# *Filename:/s@:.*$@\=": ".expand("%:t")@'
@@ -1850,15 +1953,21 @@ endfunction
 
 "" Session {{{
 set sessionoptions+=unix,slash
+set sessionoptions-=help
 " }}}
 
-"" 自动高亮光标所在单词
+"" 自动高亮光标所在单词 {{{
 " autocmd CursorMoved * silent! exe printf('match IncSearch /\<%s\>/', expand('<cword>'))
+" }}}
 
 "" MiniBufExplorer {{{
 let g:miniBufExplVSplit = 20
 let g:miniBufExplSplitBelow=1
 map <Leader>mt :TMiniBufExplorer<cr>
+" }}}
+
+"" sjump {{{
+nmap <M-g> :call sjump#JumpToLabel()<cr>
 " }}}
 
 " SaveSession {{{
@@ -1867,6 +1976,38 @@ map <Leader>mt :TMiniBufExplorer<cr>
 
 "" astyle {{{
 autocmd BufNewFile,BufRead *.c,*.cpp set formatprg=astyle\ -T8pbA8
+" }}}
+
+"" Gundo {{{
+" let g:gundo_width = 60
+" let g:gundo_preview_height = 40
+let g:gundo_right = 1
+nnoremap <leader>gu :GundoToggle<CR>
+" }}}
+
+"" CCTree {{{
+let g:CCTreeCscopeDb = "cscope.out"
+let g:CCTreeRecursiveDepth = 3
+let g:CCTreeMinVisibleDepth = 3
+let g:CCTreeOrientation = "leftabove"
+let g:CCTreeWindowVertical = 1
+" }}}
+
+"" capture the output of an ex command {{{
+" :redir @a
+" :set all
+" :redir END
+function! TabMessage(cmd)
+	redir => message
+	silent execute a:cmd
+	redir END
+	tabnew
+	silent put=message
+	set nomodified
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+" :%! [cmd]
+" :read !ls ~
 " }}}
 
 " goto the last line when you reopen a file {{{
