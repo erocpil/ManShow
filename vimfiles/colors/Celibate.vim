@@ -1,5 +1,5 @@
 " Author: lipcore
-" TimeStamp: 2011-03-06 23:18
+" TimeStamp: 星期二 19 七月 2011 08:59:17 下午 中国标准时间
 " Filename: Celibate.vim
 " Description:
 " Version:
@@ -162,7 +162,7 @@ hi StatuslineRealSyn	cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg
 hi StatuslineSyn		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#00AE72	guifg=White
 " hi TlistGetTagname		cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
 " hi UpTime				cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=steelblue	guifg=White
-hi GetTagname			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
+hi GetTagName			cterm=none   	ctermbg=white 	ctermfg=yellow 	gui=none	guibg=#E33539	guifg=White
 
 hi FileTime				term=reverse	cterm=reverse	gui=none	guibg=LightYellow	guifg=LightBlue
 hi StatusLine			term=reverse,bold	cterm=reverse,bold	ctermbg=white	ctermfg=yellow	gui=none	guibg=Grey10	guifg=White	" guibg=#99D1D3	guifg=Black	"#729eb0
@@ -211,10 +211,9 @@ hi BlockBraces	    guifg=Yellow      gui=bold  ctermfg=226 ctermbg=17 cterm=bold
 " hi cBraceR					guifg=#5BFD2B   ctermfg=14
 " hi cParenthesesL				guifg=#5BBD2B   ctermfg=14
 " hi cParenthesesR			guifg=#5BBD2B   ctermfg=14
-hi cMathOperator            guifg=#3EFFE2   ctermfg=14
-hi cPointerOperator         guifg=#3EFFE2   ctermfg=14
-hi cLogicalOperator         guifg=#3EFFE2   ctermfg=14
-hi cLogicalOperator         guifg=#3EFFE2   ctermfg=14
+hi cMathOperator            guifg=#1279E9	ctermfg=14
+hi cPointerOperator         guifg=#7279E9	ctermfg=14
+hi cLogicalOperator         guifg=#A279E9	ctermfg=14
 hi cBinaryOperator          guifg=#F0088C   gui=NONE		ctermfg=161  ctermbg=17
 hi cBinaryOperatorError     guifg=white     guibg=#b2377a	ctermfg=231 ctermbg=169 cterm=none
 " hi cBraces	                guifg=#C777EF   gui=NONE		ctermfg=177 ctermbg=17 cterm=none
@@ -227,10 +226,18 @@ hi ccendl					guifg=#C57CAC	ctermfg=17
 hi cAsk						guifg=#FF0000	ctermfg=18
 " hi cColon					guifg=#00FF00	ctermfg=14
 hi TabIndent				guifg=Grey40	ctermfg=18
+hi cType					guifg=#00FF15	ctermfg=18
 
 " Highlight Class and Function names
-hi cCustomFunc	gui=bold	guifg=YellowGreen
-hi cCustomClass	gui=bold	guifg=#F57CAC	guibg=SteelBlue4
+hi cCustomFunc	gui=bold	guifg=#FFFB00	guibg=grey10	ctermfg=202	ctermbg=17	cterm=none
+hi cCustomClass	gui=bold	guifg=#D62DD5
 hi cCustomScope	gui=bold	guifg=#00F5FF
+hi cUserLabel	gui=bold,underline	guifg=#0600FF	ctermfg=166 ctermbg=17 cterm=bold
+
+hi cStorageClass	gui=bold	guifg=#0B90E1
+hi gtkType	gui=italic	guifg=#00F5FF
+hi gtkFunction gui=italic	guifg=#EFFF00
+hi gdkType	gui=italic	guifg=#A0F5FF
+hi glibType	gui=italic	guifg=#EB90E1
 
 "vim:ts=4:tw=4:foldmethod=expr

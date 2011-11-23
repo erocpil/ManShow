@@ -1,11 +1,15 @@
 ﻿" vim: sw=4:ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " Author: erocpil
-" TimeStamp: 星期日 29 五月 2011 10:31:35 下午 中国标准时间
+" TimeStamp: Fri 11 Nov 2011 04:45:23 PM GMT
 " Filename: _vimrc
 " Description: a personal vim configuration
 " Version:
 
 "" default settings {{{
+" 使用 Windows 的风格进行复制、粘贴等：
+" "+x	=>	C-x
+" "+y	=>	C-c
+" "+gP	=>	C-v
 if has("win32")
 	source $VIMRUNTIME/vimrc_example.vim
 	source $VIMRUNTIME/mswin.vim
@@ -18,6 +22,7 @@ endif
 " }}}
 
 "" diff {{{
+" 需要额外的 diff.exe，Linux OS 默认已安装。
 set diffexpr=MyDiff()
 function! MyDiff()
 	let opt = '-a --binary '
@@ -45,6 +50,7 @@ endfunction
 " }}}
 
 "" 编码 {{{
+" 这一块比较乱，因为要配合 balloon 特性一起使用。
 " Multi-encoding setting, MUST BE IN THE BEGINNING OF .vimrc!
 if has("multi_byte")
 	set nolinebreak
@@ -92,15 +98,16 @@ if has("multi_byte")
 		set encoding=utf-8
 	endif
 else
-	echoerr 'Attention!! This version of (g)Vim was not compiled with "multi_byte"'
+	echoerr 'Attention!! This version of (g)Vim was not compiled with "multi_byte".'
 endif
-" encodings END }}}
+" }}}
 
 "" 在 shell 中指定要打开文件的编码 {{{
 " vim file_name -c "e ++enc=cp936"
 " }}}
 
 "" 中文帮助 {{{
+" 我不用中文帮助，没测试过效果。
 set helplang=cn
 " }}}
 
@@ -112,11 +119,12 @@ if has("win32")
 	language messages zh_CN.utf-8
 	source $VIMRUNTIME/delmenu.vim
 	source $VIMRUNTIME/menu.vim
+	" 这一行另外设置
 	set ambiwidth=double
 endif
 " }}}
 
-" 判断 Vim 是否包含多字节语言支持，并且版本号大于 7.3 {{{
+"" 判断 Vim 是否包含多字节语言支持，并且版本号大于 7.3 {{{
 if has('multi_byte') && v:version > 703
 	" 如果 Vim 的语言（受环境变量 LANG 影响）是中文（zh）、日文（ja）
 	" 或韩文（ko）的话，将模糊宽度的 Unicode 字符的宽度设为双宽度（double）
@@ -128,8 +136,8 @@ endif
 
 "" Balloon {{{
 "" The following two functions are the examples of <Hacking Vim>, Chapter 2
-"" This example is based on one from the Vim help system, and shows how to make
-"" a simple function that will show the info from all the available variables.
+" This example is based on one from the Vim help system, and shows how to
+" make a simple function that will show the info from all the available variables.
 " function! SimpleBalloon()
 "    return 'Cursor is at line/column: ' . v:beval_lnum .
 "     \'/' . v:beval_col .
@@ -139,6 +147,7 @@ endif
 " set balloonexpr=SimpleBalloon()
 " set ballooneval
 "" 显示翻译结果，目前只对单词有效。 {{{
+" 这一部分应该有专门的插件可供使用。
 " function! GoTr()
 " 	if has('win32')
 " 		let lines = g:PyGoogleTranslate(expand('<cword>'),1)
@@ -156,7 +165,8 @@ endif
 " }}}
 
 "" a more advanced example, to activate it, just turn on the spell check: {{{
-"" :set spell
+" :set spell
+" Balloon 的三种复用：拼写检查、折叠内容、tags。
 function! FoldSpellBalloon()
 	let foldStart = foldclosed(v:beval_lnum )
 	let foldEnd   = foldclosedend(v:beval_lnum)
@@ -165,8 +175,8 @@ function! FoldSpellBalloon()
 	if foldStart < 0
 		if &spell
 			" Detect if we are on a misspelled word
-			let lines = spellsuggest( spellbadword(v:beval_text)[ 0 ], 5, 0 )
-			return join( lines, has( "balloon_multiline" ) ? "\n" : " " )
+			let lines = spellsuggest(spellbadword(v:beval_text)[ 0 ], 5, 0)
+			return join(lines, has("balloon_multiline") ? "\n" : " ")
 		else
 			" return tags
 			" tag_signature.vim:
@@ -176,6 +186,7 @@ function! FoldSpellBalloon()
 		endif
 	else
 		" we are in a fold
+		" 折叠的方式可以单独设置
 		let numLines = foldEnd - foldStart + 1
 		" if we have too many lines in fold, show only the first 14
 		" and the last 14 lines
@@ -206,7 +217,8 @@ set balloondelay=100
 " }}}
 " Balloon ends }}}
 
-" turn off nice effect on status bar title {{{
+"" turn off nice effect on status bar title {{{
+" 效果未知
 let performance_mode=0
 let use_plugins_i_donot_use=0
 set nocompatible
@@ -221,19 +233,25 @@ if has("gui_running")
 		" set guifont=DejaVu_Sans_Mono:h10.875:cANSI
 		set guifont=Monaco:h10.75:cANSI
 		" 设置中文字体，微软雅黑需要重新编译 Vim 。
+		" 微软雅黑的字号要与英文字体一同调节，否则有向左下方下沉的趋势。
 		set gfw=Microsoft_YaHei:h11
+		" 一些常用中文字体的设置方法：
+		" 官方的 Vim 可以使用幼圆字体。
 		" set guifontwide=YouYuan:h11:cGB2312
 		" set gfw=FZJingLeiS\-R\-GB:h13
 		" set gfw=文泉驿正黑:h12:cGB2312
 		" set gfw=PMingLiU:h12:cGB2312
 		" 针对不同的文件使用不同字体
-		autocmd BufEnter *.txt set guifontwide=YouYuan:h11:cGB2312 | setlocal ft=txt
+		" txt 格式可以用特定的高亮插件，所以加上`set ft=txt'会比较方便，
+		autocmd BufEnter *.txt set guifontwide=YouYuan:h11:cGB2312
+					\ | setlocal ft=txt
+					\ | syn on	" 正常显示帮助文件。
 		autocmd BufEnter * :syntax sync fromstart
 		" 全屏
 		map <F11> <Esc>:call libcallnr("gvimfullscreen.dll", "ToggleFullScreen", 0)<CR>
 		if executable("vimtweak.dll")
 			" Alpha Window
-			map <leader>aw :call libcallnr("vimtweak.dll", "SetAlpha", 168)<cr>
+			map <leader>aw :call libcallnr("vimtweak.dll", "SetAlpha", 128)<cr>
 			map <leader>aW :call libcallnr("vimtweak.dll", "SetAlpha", 255)<cr>
 			" Maximized Window
 			map <leader>mw :call libcallnr("vimtweak.dll", "EnableMaximize", 1)<cr>
@@ -243,6 +261,7 @@ if has("gui_running")
 			map <leader>eT :call libcallnr("vimtweak.dll", "EnableTopMost", 0)<cr>
 		endif
 	else
+		" Linux OS 字体的设置方法：
 		set guifont=Menlo\ 11
 		set gfw=Microsoft\ YaHei\ 11
 	endif
@@ -253,8 +272,14 @@ if has("gui_running")
 	" these autocommands: >
 	" au WinLeave * set nocursorline nocursorcolumn
 	" au WinEnter * set cursorline cursorcolumn
-	map <leader>cc :set cursorcolumn <cr>
-	map <leader>cC :set nocursorcolumn <cr>
+	" 由于 Vim 将字体“强制”等宽显示，所以这个特性非常方便。
+	" 具体的高亮颜色在配置色方案里设置。
+	" colorcolumn
+	map <silent> <leader>cu :if &cursorcolumn =~# '0' <Bar>
+				\set cursorcolumn <Bar>
+				\else <Bar>
+				\set nocursorcolumn <Bar>
+				\endif<CR>
 	map <leader>c1 :set cc=+1 <cr>
 	map <leader>c2 :set cc= <cr>
 	"" noh
@@ -272,6 +297,7 @@ if has("gui_running")
 	map <leader>le :winpos 1800 120 <cr>
 	map <leader>ri :winpos -1800 120 <cr>
 	map <leader>tt :winpos 0 0 <cr>
+	map <leader>sw :winsize 100 30<cr>
 	" set lines
 	map <leader>sl :set lines=40 <cr>
 	map <leader>sL :set lines=25 <cr>
@@ -286,19 +312,21 @@ if has("gui_running")
 	set guioptions-=r
 	set guioptions-=R
 	"" map
-	" 菜单栏
+	" 菜单栏 {{{
 	map <silent> <leader>gm :if &guioptions =~# 'm' <Bar>
 				\set guioptions-=m <Bar>
 				\else <Bar>
 				\set guioptions+=m <Bar>
 				\endif<CR>
-	" 工具栏
+	" }}}
+	" 工具栏 {{{
 	map <silent> <leader>gt :if &guioptions =~# 'T' <Bar>
 				\set guioptions-=T <Bar>
 				\else <Bar>
 				\set guioptions+=T <Bar>
 				\endif<CR>
-	" 滚动条
+	" }}}
+	" 滚动条 {{{
 	map <silent> <leader>gl :if &guioptions =~# 'l' <Bar>
 				\set guioptions-=l <Bar>
 				\else <Bar>
@@ -314,15 +342,17 @@ if has("gui_running")
 				\else <Bar>
 				\set guioptions+=b <Bar>
 				\endif<CR>
-	" 画图、表
+	" }}}
+	" 画图、表 {{{
 	map <leader>sk :call ToggleSketch()<CR>
-	" colorscheme ManShow
-	colorscheme thegoodluck
-	" colorscheme candyman
-	" colorscheme softbluev2
+	" }}}
+	colorscheme ManShow
+	" colorscheme thegoodluck
+	" colorscheme Celibate
 else
 	set background=dark
-	colorscheme vilight
+	" colorscheme vilight
+	colorscheme ManShow
 endif
 " }}}
 
@@ -340,6 +370,11 @@ map <leader>tn :tabnext<cr>
 map <leader>tN :tabNext<cr>
 map <leader>tp :tabp<cr>
 map <leader>to :tabonly<cr>
+map <M-p> :tabp<cr>
+map <M-n> :tabnext<cr>
+map <M-f> :tabfirst<cr>
+map <M-e> :tabl<cr>
+map <M-L> :tabl<cr>
 map <leader>bd :bd<cr>
 map <leader>vn :vnew<cr>
 map <leader>hs :split<cr>
@@ -352,17 +387,33 @@ map <leader>cw :cw<cr>
 nmap <leader>w :w!<cr>
 map <leader>ev :e! $MYVIMRC<cr>
 " others
+" A.vim {{{
 map <leader>aa :A<cr>
-map <leader>sw :winsize 100 30<cr>
+" }}}
 map <leader>me :message<cr>
 " list
 map <leader>li :se list<cr>
 map <leader>lI :se nolist<cr>
 " exchange 2 lines
-nmap <C-Down> : <C-u>move .+1<CR>
+nmap <C-Down> : <C-u>move .+1<cr>
 " StatusLine
 nmap <leader>sx :set statusline=<cr>
 nmap <M-O> o<esc>
+" Perl
+inoremap <leader>pu<M-j> #!/usr/bin/env perl<cr>
+			\#TimeStamp: <now><cr>
+			\use 5.010;<cr>
+			\use strict;<cr>
+			\use warnings;<cr>
+nmap <leader>se :Sex<cr>
+nmap <leader>gg gg=G
+nmap <leader>gw gg=G:w<cr>
+" Grep.vim
+nnoremap <leader>G :Grep<CR>
+" Remove the Windows ^M - when the encodings gets messed up
+noremap <Leader>mm mmHmt:%s/<C-V><cr>//ge<cr>'tzt'm
+"" 行内跳转到指定百分比的列（Vim 用户手册中文版7.3）
+nnoremap <expr> g<Bar> '<Esc>'.float2nr(round((col('$')-1) * min([100, v:count])/ 100.0)) .'<Bar>'
 " }}}
 
 "" When vimrc is edited, reload it {{{
@@ -381,6 +432,7 @@ set ffs=unix,dos,mac
 " }}}
 
 "" set number {{{
+set numberwidth=8
 map <leader>nu :set number<cr>
 map <leader>nn :set nonumber<cr>
 map <leader>rn :set rnu<cr>
@@ -391,7 +443,7 @@ map <leader>rN :set nornu<cr>
 set showcmd
 " }}}
 
-" 针对文本模式的设定 {{{
+"" 针对文本模式的设定 {{{
 if !has('gui_running')
 	" 将变量 Tlist_Inc_Winwidth 的值设为 0，防止 taglist 插件改变终端窗口的大小
 	" （有些情况下会引起系统不稳定）。使用“has('eval')”
@@ -448,7 +500,7 @@ set nobackup
 setlocal noswapfile
 set bufhidden=hide
 "" 字符间插入的像素行数目
-set linespace=0
+set linespace=1
 "" 增强模式中的命令行自动完成操作
 set wildmenu
 set wildmode=list:longest,full
@@ -477,7 +529,7 @@ set whichwrap=b,s,h,l,<,>,~,[,] " everything wraps
 "             +-- <BS> Normal and Visual
 " }}}
 
-" 可以在buffer的任何地方使用鼠标 {{{
+"" 可以在buffer的任何地方使用鼠标 {{{
 if has('mouse')
 	set mouse=a
 	set selection=exclusive
@@ -490,7 +542,7 @@ endif
 set shortmess=atI
 " 通过使用: commands命令，告诉我们文件的哪一行被改变过
 set report=0
-" 不让vim发出讨厌的滴滴声
+" 取消 Vim 的滴滴声
 " set noerrorbells
 " 在被分割的窗口间显示空白，便于阅读
 set fillchars=vert:\ ,stl:\ ,stlnc:\
@@ -519,13 +571,13 @@ set laststatus=2
 " 自动格式化
 " set formatoptions=tcrqn
 " 正确处理中文字符的折行和拼接
-set formatoptions+=mM
-" set formatoptions+=tcroqn2mBM1
+" set formatoptions+=mM
+set formatoptions+=tcroqn2mBM1
 " 继承前一行的缩进方式，特别适用于多行注释
 set autoindent
-" 为C程序提供自动缩进
+" 为 C 程序提供自动缩进
 set smartindent
-" 使用C样式的缩进
+" 使用 C 样式的缩进
 set cindent
 " 制表符为4
 set tabstop=4
@@ -544,35 +596,30 @@ set lbr
 
 "" CTags {{{
 if has('win32')
-	set tags+=D:/dev/gtkmm/include/tags
-	set path+=D:/dev/gtkmm/include/,D:/dev/gtkmm/include/*
-	" 	set tags+=D:/Qt/qt/include/tags
-	" 	set tags+=D:/Qt/qt/src/tags
-	" 	set path+=D:/Qt/qt/include,D:/Qt/qt/include/*,D:/Qt/qt/src/,D:/Qt/qt/src/*,D:/Qt/qt/,D:/Qt/qt/*
-	" 	set tags+=D:/dev/codeblocks/build/gcc/include/tags
-	" 	set path+=D:/dev/codeblocks/build/gcc/include/:D:/dev/codeblocks/build/gcc/include/*
+	" 添加额外的 tags，需要先生成。
+	set tags+=C:/GTK/include/tags
+	set path+=C:/GTK/include/,C:/GTK/include/*
 else
-	set tags+=/opt/qtsdk/qt/include/tags
-	set tags+=/opt/qtsdk/qt/src/tags
-	set path+=/opt/qtsdk/qt/include,/opt/qtsdk/qt/include/*,/opt/qtsdk/qt/src/,/opt/qtsdk/qt/src/*,/opt/qtsdk/qt/,/opt/qtsdk/qt/*
+	set tags+=/usr/include/gtk-2.0/gtk/tags,/usr/include/gtk-2.0/gdk/tags
+	set path+=/usr/include/gtk-2.0/gtk/*,/usr/include/gtk-2.0/gdk/*
 endif
 " }}}
 
 "" taglists {{{
-" <CR>          跳到光标下tag所定义的位置，用鼠标双击此tag功能也一样
-" o             在一个新打开的窗口中显示光标下tag
-" <Space>       显示光标下tag的原型定义
-" u             更新taglist窗口中的tag
-" s             更改排序方式，在按名字排序和按出现顺序排序间切换
-" x             taglist窗口放大和缩小，方便查看较长的tag
-" +             打开一个折叠，同zo
-" -             将tag折叠起来，同zc
-" *             打开所有的折叠，同zR
-" =             将所有tag折叠起来，同zM
-" [[            跳到前一个文件
-" ]]            跳到后一个文件
-" q             关闭taglist窗口
-" <F1>          显示帮助
+" <CR>		跳到光标下tag所定义的位置，用鼠标双击此tag功能也一样
+" o			在一个新打开的窗口中显示光标下tag
+" <Space>	显示光标下tag的原型定义
+" u			更新taglist窗口中的tag
+" s			更改排序方式，在按名字排序和按出现顺序排序间切换
+" x			taglist窗口放大和缩小，方便查看较长的tag
+" +			打开一个折叠，同zo
+" -			将tag折叠起来，同zc
+" *			打开所有的折叠，同zR
+" =			将所有tag折叠起来，同zM
+" [[		跳到前一个文件
+" ]]		跳到后一个文件
+" q			关闭taglist窗口
+" <F1>		显示帮助
 " nnoremap <silent> <C-F7> :TlistToggle<CR>
 map <F7> :TlistToggle<cr>
 " 按照名称排序
@@ -605,13 +652,13 @@ let g:ctags_regenerate=0
 " }}}
 
 "" BufExplorer {{{
-let g:bufExplorerDefaultHelp=0       " Do not show default help.
-let g:bufExplorerShowRelativePath=1  " Show relative paths.
-let g:bufExplorerSortBy='mru'        " Sort by most recently used.
-let g:bufExplorerSplitRight=1        " Split left.
-let g:bufExplorerSplitVertical=1     " Split vertically.
-let g:bufExplorerSplitVertSize = 20  " Split width
-let g:bufExplorerUseCurrentWindow=0  " Open in new window.
+let g:bufExplorerDefaultHelp=0		" Do not show default help.
+let g:bufExplorerShowRelativePath=1	" Show relative paths.
+let g:bufExplorerSortBy='mru'		" Sort by most recently used.
+let g:bufExplorerSplitRight=1		" Split left.
+let g:bufExplorerSplitVertical=1	" Split vertically.
+let g:bufExplorerSplitVertSize = 20	" Split width
+let g:bufExplorerUseCurrentWindow=0	" Open in new window.
 "" winManager settings
 let g:winManagerWindowLayout = "BufExplorer,FileExplorer|TagList"
 let g:winManagerWidth = 30
@@ -647,7 +694,7 @@ map <M-/> <Plug>NERDCommenterToggle
 imap <M-/> <C-O><Plug>NERDCommenterToggle
 " }}}
 
-" 切换窗口 {{{
+"" 切换窗口 {{{
 " S
 imap <silent> <S-left> <esc><C-W><left>
 vmap <silent> <S-left> <esc><C-W><left>
@@ -729,11 +776,11 @@ endfunction
 "" ConvertHtmlEncoding {{{
 function! ConvertHtmlEncoding(encoding)
 	if a:encoding ==? 'gb2312'
-		return 'gbk'              " GB2312 imprecisely means GBK in HTML
+		return 'gbk'			" GB2312 imprecisely means GBK in HTML
 	elseif a:encoding ==? 'iso-8859-1'
-		return 'latin1'           " The canonical encoding name in Vim
+		return 'latin1'			" The canonical encoding name in Vim
 	elseif a:encoding ==? 'utf8'
-		return 'utf-8'            " Other encoding aliases should follow here
+		return 'utf-8'			" Other encoding aliases should follow here
 	else
 		return a:encoding
 	endif
@@ -777,26 +824,27 @@ function! GnuIndent()
 endfunction
 " }}}
 
+"" HTML 编码 {{{
 " 在遇到 HTML 文件时，如果 Vim 判断出的编码类型和 HTML 代码中使用
 " "<meta http-equiv="Content-Type" content="text/html; charset=编码">"
 " 规定的编码不一致，将使用网页中规定的编码重新读入该文件。函数
-" ConvertHtmlEncoding 会把一些网页中使用的编码名称转换成 Vim
-" 能够正确处理的编码名称；函数 DetectHtmlEncoding 在判断文件类型确实是
-" HTML 之后，会记下当前的光标位置，并搜索上面这样的 HTML 代码行，
-" 找出字符集编码后，在编码不等于当前文件编码（fileencoding）
-" 时且当前文件编码为空或等于系统判断出的文件编码时，
-" 使用该编码强制重新读入文件，忽略任何错误（"silent!"）。
-" 该自动命令写成是可嵌套执行的（":help autocmd-nested"），
-" 目的是保证语法高亮显示有效，且上次打开文件的光标位置能够正确保持。
+" ConvertHtmlEncoding 会把一些网页中使用的编码名称转换成 Vim能够正确处理的
+" 编码名称；函数 DetectHtmlEncoding 在判断文件类型确实是HTML 之后，会记下当
+" 前的光标位置，并搜索上面这样的 HTML 代码行，找出字符集编码后，
+" 在编码不等于当前文件编码（fileencoding）时且当前文件编码为空或等于系统判
+" 断出的文件编码时，使用该编码强制重新读入文件，忽略任何错误（"silent!"）。
+" 该自动命令写成是可嵌套执行的（":help autocmd-nested"），目的是保证语法高
+" 亮显示有效，且上次打开文件的光标位置能够正确保持。
 " Detect charset encoding in an HTML file
 au BufReadPost *.htm* nested call DetectHtmlEncoding()
 " 只要没有将环境变量 VIM_HATE_SPACE_ERRORS 的值设为零，则把变量
-" c_space_errors 的值设为 1——效果是在 C/C++ 代码中“不正确”
-" 的空白字符（行尾的空白字符和紧接在制表符之前的空格字符）
-" 将会被高亮显示。
+" c_space_errors 的值设为 1——效果是在 C/C++ 代码中“不正确”的空白字符
+" （行尾的空白字符和紧接在制表符之前的空格字符）将会被高亮显示。
 function! RemoveTrailingSpace()
 	if $VIM_HATE_SPACE_ERRORS != '0' &&
-				\(&filetype == 'c' || &filetype == 'cpp' || &filetype == 'vim')
+				\ (&filetype == 'c' ||
+				\ &filetype == 'cpp' ||
+				\ &filetype == 'vim')
 		normal m`
 		silent! :%s/\s\+$//e
 		normal ``
@@ -810,13 +858,12 @@ endfunction
 setlocal spell spelllang=en_gb
 " set spell spelllang=en_gb
 set nospell
-map <F3> :set spell!<CR><BAR>:echo "Spell check: " . strpart("OffOn", 3 * &spell, 3)<CR>
+map <F3> :set spell!<CR><BAR>:echo "Spell check: " .
+			\ strpart("OffOn", 3 * &spell, 3)<CR>
 " }}}
 
 "" compile {{{
-" 编译和运行 c 和 cpp 程序
-" 下述代码在 windows 下使用会报错
-" 需要去掉 ./ 这两个字符
+" 编译和运行 c/cpp 程序，在 windows 下使用会报错，需要去掉 ./ 这两个字符。
 if has("unix")
 	" C
 	map <C-F5> :call CompileRunGcc()<CR>
@@ -835,7 +882,7 @@ if has("unix")
 endif
 " }}}
 
-" .NFO {{{
+"" .NFO {{{
 function! SetFileEncodings(encodings)
 	let b:myfileencodingsbak=&fileencodings
 	let &fileencodings=a:encodings
@@ -849,11 +896,11 @@ au BufReadPost *.nfo call RestoreFileEncodings()
 au BufWinEnter *.txt call CheckFileEncoding()
 " }}}
 
-""高亮显示普通txt文件（需要txt.vim脚本） {{{
+"" 高亮显示普通txt文件（需要txt.vim脚本） {{{
 au BufRead,BufNewFile *  setfiletype txt
 " }}}
 
-" fold {{{
+"" fold {{{
 " 用空格键来开关折叠
 nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc':'zo')<CR>
 set foldenable
@@ -864,18 +911,23 @@ set foldopen -=undo
 " 去除空行
 " set foldexpr=getline(v:lnum)=~'\\S'&&getline(v:lnum-1)!~'\\S'?'>1':'='
 au FileType fuck set fdm=expr | foldexpr=getline(v:lnum)=~'^\\S!'&&getline(v:lnum-1)!~'\\S'?'>1':'='
-au FileType txt,vim,lisp set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0 | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1) | set foldcolumn=1
+au FileType txt,vim,lisp set fdm=expr | set fde=getline(v\:lnum)=~'.'?1:0
+			\ | set foldtext=foldtext().v:folddashes.getline(v:foldstart+1)
+			\ | set foldcolumn=1
 au FileType cpp,c,java set foldmethod=syntax | set foldcolumn=2
-au FileType perl,tex,php,html,css,sh set foldmethod=indent | set foldcolumn=2
+au FileType perl,tex,php,html,css,sh set foldmethod=indent
+			\ | set foldcolumn=2
 nmap <leader>fc :set foldcolumn=1<cr>
 nmap <leader>fC :set foldcolumn=0<cr>
 " }}}
 
-" 根据邮件的后缀名进行相关的设置。 {{{
+"" 根据邮件的后缀名进行相关的设置。 {{{
 " 如果打开的文件后缀名是'.eml'，则当成邮件处理。
 " http://blah.blogsome.com/2006/04/13/vim_tut_folding/
-autocmd! BufReadPre *.eml se fdm=expr fde=v:lnum==1?1:getline(v:lnum)=~'^$'?
-			\ 0:'=' fdt=Mailfdt(v:foldstart,v:foldend) ft=mail | syn on
+autocmd! BufReadPre *.eml se fdm=expr
+			\ fde=v:lnum==1?1:getline(v:lnum)=~'^$'? 0:'='
+			\ fdt=Mailfdt(v:foldstart,v:foldend) ft=mail
+			\ | syn on
 " 定义函数，用来返回折叠的标题。
 " 以折叠的第一和最后一行的行号为参数
 func! Mailfdt(fst,fen)
@@ -974,18 +1026,21 @@ let html_dynamic_folds = 1
 " let html_ignore_folding=1
 " }}}
 
-"" minibufexpl插件的一般设置 {{{
+"" MiniBufExplorer 插件的一般设置 {{{
 let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1
+let g:miniBufExplVSplit = 20
+let g:miniBufExplSplitBelow=1
+map <Leader>mt :TMiniBufExplorer<cr>
 " }}}
 
 "" Omni menu colors {{{
-"" Pmenu		普通项 |hl-Pmenu|
-"" PmenuSel	选中项 |hl-PmenuSel|
-"" PmenuSbar	滚动条 |hl-PmenuSbar|
-"" PmenuThumb	滚动条拇指 (thumb) |hl-PmenuThumb|
+" Pmenu			普通项 |hl-Pmenu|
+" PmenuSel		选中项 |hl-PmenuSel|
+" PmenuSbar		滚动条 |hl-PmenuSbar|
+" PmenuThumb	滚动条拇指 (thumb) |hl-PmenuThumb|
 "" 这一部分写在 Celibate.vim
 " hi Pmenu guibg=#00b2bf guifg=#ffffff
 " hi PmenuSel guibg=#40FF7F guifg=#9B30FF
@@ -997,22 +1052,24 @@ let g:miniBufExplModSelTarget = 1
 
 "" common {{{
 " Change buffer - without saving
-set hid
-"No sound on errors.
+" set hid
+" When I close a tab, remove the buffer
+set nohidden
+" No sound on errors.
 set noerrorbells
 set novisualbell
 set t_vb=
 " }}}
 
-" Calendar {{{
+"" Calendar {{{
 let g:calendar_focus_today = 1
 " }}}
 
-" TeX {{{
+"" TeX {{{
 let g:tex_flavor='latex'
 " }}}
 
-" calibre.vim - Syntax Highlighting {{{
+"" calibre.vim - Syntax Highlighting {{{
 augroup filetype
 	au!
 	au! BufRead,BufNewFile *.rules  set filetype=calibre
@@ -1023,8 +1080,8 @@ augroup END
 "" MRU {{{
 " let MRU_File = 'd:\myhome\_vim_mru_files'
 let MRU_Max_Entries = 1000
-" let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
-" let MRU_Exclude_Files = '^c:\\temp\\.*'           " For MS-Windows
+" let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'	" For Unix
+" let MRU_Exclude_Files = '^c:\\temp\\.*'			" For MS-Windows
 let MRU_Include_Files = '\.c$\|\.h$'
 let MRU_Window_Height = 15
 let MRU_Use_Current_Window = 1
@@ -1035,7 +1092,7 @@ let MRU_Max_Menu_Entries = 20
 " }}}
 
 "" PostScript {{{
-"" 打印，+postscript 时有用
+"" 打印，编译 Vim 加入 +postscript 特性时可用
 " 打印机使用"iP1880-series", 不配置表示使用系统默认打印机.
 "set printdevice=iP1880-series
 " set printdevice=HP\ Color\ LaserJet\ 8550-PS
@@ -1046,8 +1103,10 @@ set printmbcharset=ISO10646
 " 打印所用字体, 在linux下, 要用ghostscript里已有的字体, 不然会打印乱码.
 " set printmbfont=r:STSong-Light,c:yes "MSungGBK-Light
 " set printmbfont=r:MicrosoftYaHei,b:STHeiti-Regular,i:FangSong,o:STFangsong-Light,c:yes "MSungGBK-Light
-set printmbfont=r:bkaiu,b:ShanHeiSun-Light,i:bsmi,o:gbsn,c:yes "MSungGBK-Light
-" 打印可选项, formfeed: 是否处理换页符, header: 页眉大小, paper: 用何种纸, duplex: 是否双面打印, syntax: 是否支持语法高
+" set printmbfont=r:bkaiu,b:ShanHeiSun-Light,i:bsmi,o:gbsn,c:yes "MSungGBK-Light
+set printmbfont=r:MicrosoftYaHei,b:SimSun,i:KaiTi,o:FangSong,c:yes "MSungGBK-Light
+" 打印可选项, formfeed: 是否处理换页符, header: 页眉大小, paper: 用何种纸,
+" duplex: 是否双面打印, syntax: 是否支持语法高
 set printoptions=formfeed:y,header:5,paper:A4,duplex:on,syntax:y
 " 页眉格式
 set printheader=%<%f%h%m%=Page\ %N
@@ -1059,7 +1118,7 @@ set printheader=%<%f%h%m%=Page\ %N
 "    let c = getline(".")[col(".") - 1]
 "    echo c
 "    exe "noremap <LeftMouse> <LeftMouse>r".c
-"    exe "noremap <LeftDrag>	<LeftMouse>r".c
+"    exe "noremap <LeftDrag> <LeftMouse>r".c
 " endfunction
 " noremap <RightMouse> <LeftMouse>:call GetPixel()<CR>
 " set guicursor=n:hor20	   " 可以看到光标下的颜色
@@ -1076,7 +1135,8 @@ set printheader=%<%f%h%m%=Page\ %N
 " 		let line = getline(n)
 " 		" 有则执行更新动作
 " 		if line =~ '\s\*\s\$Id:\s'.expand("%:t").'\s.*'
-" 			exe "1," . l . " s/$Id: ".expand("%:t")." .*/$Id: ". expand("%:t") . strftime(" %Y-%m-%d %X")." zhangxinyi$"
+" 			exe "1," . l . " s/$Id: ".expand("%:t")." .*/$Id: "
+" 			\ . expand("%:t") . strftime(" %Y-%m-%d %X")." zhangxinyi$"
 " 		endif
 " 		let n = n + 1
 " 	endwhile
@@ -1088,7 +1148,9 @@ au FileType php setlocal dict+=$VIM/vimfiles/ExtraVim/php_funclist.txt
 "" 检查当前文件代码语法 (php){{{
 function! CheckSyntax()
 	if &filetype!="php"
-		echohl WarningMsg | echo "Fail to check syntax! Please select the right file!" | echohl None
+		echohl WarningMsg
+					\ | echo "Fail to check syntax!"
+					\ | echohl None
 		return
 	endif
 	if &filetype=="php"
@@ -1136,16 +1198,13 @@ endfunction
 autocmd BufWritePre * call RemoveTrailingWhitespace()
 " }}}
 
-" When I close a tab, remove the buffer {{{
-set nohidden
-" }}}
-
 "" map {{{
 "" This is useful when two lines is combined without a space
 map <leader>j gJdw
 "" 用 ` 替换 <ESC>
 " imap ` <ESC>
-" This is totally awesome - remap jj to escape in insert mode.  You'll never type jj anyway, so it's great!
+" This is totally awesome - remap jj to escape in insert mode.
+" You'll never type jj anyway, so it's great!
 inoremap jj <Esc>
 " nnoremap JJJJ <Nop>
 au FileType cpp,c,perl,html,lisp,java,php,tex,vim,sh imap { {}<ESC>i
@@ -1193,22 +1252,19 @@ endif
 
 "" MayanSmoke {{{
 " Customization:
-" ==============
-"
-" If any of the following highlights are defined (e.g., in your "~/.vimrc"), these will override the default highlight definitions:
-"
+" If any of the following highlights are defined (e.g., in your "~/.vimrc"
+" ), these will override the default highlight definitions:
 "     MayanSmokeCursorLine    (will be applied to: CursorColumn and CursorLine)
 "     MayanSmokeSearch        (will be applied to: Search and IncSearch)
 "     MayanSmokeSpecialKey    (will be applied to: SpecialKey)
-"
-" For example, you can set the following in your "~/.vimrc" to select your own colors for these items:
-"
+" For example, you can set the following in your "~/.vimrc" to select your
+" own colors for these items:
 "     hi MayanSmokeCursorLine     guifg=NONE   guibg=yellow  gui=NONE
 "     hi MayanSmokeSearch         guifg=white  guibg=blue    gui=NONE
 "     hi MayanSmokeSpecialKey     guifg=NONE   guibg=green   gui=NONE
-"
-" Alternatively, you can define one or more of the following values in your "~/.vimrc" to select different pre-defined levels of visibility for the above highlights:
-"
+" Alternatively, you can define one or more of the following values in your
+" "~/.vimrc" to select different pre-defined levels of visibility for the
+" above highlights:
 let g:mayansmoke_cursor_line_visibility = 0  " lower visibility
 let g:mayansmoke_cursor_line_visibility = 1  " medium visibility
 let g:mayansmoke_cursor_line_visibility = 2  " higher visibility
@@ -1224,6 +1280,7 @@ let g:mayansmoke_special_key_visibility = 2  " higher visibility
 
 "" cppcomplete
 imap <C-F5> <ESC>:PreviewClass<CR>a
+au FileType c,cpp setlocal dict+=$VIM/vimfiles/ExtraVim/gtk_key_words.txt
 
 "" cscope {{{
 nmap <leader>cs :cscope -b -R<cr>
@@ -1275,12 +1332,12 @@ let no_otl_maps=0
 let no_otl_insert_maps=0
 " }}}
 
-" overrides: {{{
+"" overrides: {{{
 let otl_bold_headers=0
 let otl_use_thlnk=0
 " }}}
 
-" OTL? {{{
+"" OTL? {{{
 " au BufWinLeave *.otl mkview
 " au BufWinEnter *.otl silent loadview
 let maplocalleader = ","
@@ -1362,6 +1419,7 @@ let maplocalleader = ","
 
 "" timestamp.vim {{{
 " let timestamp_regexp = '\v\C%(<Last %([cC]hanged?|[Mm]odified):\s+)@<=.*$'
+" 这里稍做配置以便与 emacs 的兼容
 let timestamp_regexp = '\v\C%(<(TimeStamp|Time-[Ss]tamp):\s+)@<=.*$'
 " }}}
 
@@ -1372,17 +1430,18 @@ set iskeyword+=:
 " form: Perl Hacks, Chapter 1, Hack 10.
 " run the currently edited test file
 " map <leader>pt <Esc>:!prove -v1 %<CR>
-" If lib/ is not where you typically do your development, use the I switch to add a different path to @INC.
+" If lib/ is not where you typically do your development, use the I switch
+" to add a different path to @INC.
 map <leader>pt  <Esc>:!prove -Iwork/ -v %<CR>
 " Seeing failures
 map <leader>pT <Esc>:!prove -lv % \\| less<CR>
 let perl_extended_vars=1
 set matchpairs+=<:>  " allow % to bounce between angles
 " perl-support
-let g:Perl_AuthorName      = 'erocpil'
-let g:Perl_AuthorRef       = 'http://lxh.heliohost.org/'
-let g:Perl_Email           = 'erocpil@gmail.com'
-let g:Perl_Company         = 'erocpil'
+let g:Perl_AuthorName	= 'erocpil'
+let g:Perl_AuthorRef	= 'http://lxh.heliohost.org/'
+let g:Perl_Email		= 'erocpil@gmail.com'
+let g:Perl_Company		= 'erocpil'
 " Create new subroutines
 " http://vim.wikia.com/wiki/Create_new_subroutines
 nnoremap <Leader>ns :call Newsub()<CR>
@@ -1411,6 +1470,38 @@ if &ft=="perl"
 else
 	set equalprg=
 endif
+if has("win32")
+	nmap <leader>pl :!perl E:\Software\Vim\vim73\tools\pltags.pl *.pl *.pm<cr>
+else
+	nmap <leader>pl :!perl /root/bin/Vim/tools/pltags.pl *.pl *.pm<cr>
+endif
+
+"" eregex.vim {{{
+nnoremap / :M/
+nnoremap ? :M?
+nnoremap <leader>/ /
+nnoremap <leader>? /
+let eregex_replacement=3
+" }}}
+
+"" TT2 syntax {{{
+" au BufNewFile,BufRead *.tt2 setf tt2
+au BufNewFile,BufRead *.tt2
+			\ if ( getline(1) . getline(2) . getline(3) =~ '<\chtml'
+			\ && getline(1) . getline(2) . getline(3) !~ '<[%?]' )
+			\   || getline(1) =~ '<!DOCTYPE HTML' |
+			\   setf tt2html |
+			\ else |
+			\   setf tt2 |
+			\ endif
+" define START_TAG, END_TAG
+"ASP"
+:let b:tt2_syn_tags = '<% %>'
+"PHP"
+:let b:tt2_syn_tags = '<? ?>'
+"TT2 and HTML"
+:let b:tt2_syn_tags = '\[% %] <!-- -->'
+" }}}
 " }}}
 
 "" Open URL in browser {{{
@@ -1459,7 +1550,7 @@ endfunction
 nnoremap <silent> <C-F9> :execute RotateColorTheme()<CR>
 " }}}
 
-" Paste Toggle {{{
+"" Paste Toggle {{{
 let paste_mode = 0 " 0 = normal, 1 = paste
 func! Paste_on_off()
 	if g:paste_mode == 0
@@ -1472,7 +1563,8 @@ func! Paste_on_off()
 	return
 endfunc
 " }}}
-" Paste Mode!  Dang! <F10> {{{
+
+"" Paste Mode!  Dang! <F10> {{{
 nnoremap <silent> <C-F10> :call Paste_on_off()<CR>
 set pastetoggle=<C-F10>
 " }}}
@@ -1489,18 +1581,18 @@ function! TodoListMode()
 endfunction
 " }}}
 
-" TODO Mode {{{
+"" TODO Mode {{{
 nnoremap <silent> <Leader>todo :execute TodoListMode()<CR>
 " }}}
 
-" Testing {{{
+"" Testing {{{
 set completeopt=longest,menuone,preview
 inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
 inoremap <expr> <c-n> pumvisible() ? "\<lt>c-n>" : "\<lt>c-n>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 inoremap <expr> <m-;> pumvisible() ? "\<lt>c-n>" : "\<lt>c-x>\<lt>c-o>\<lt>c-n>\<lt>c-p>\<lt>c-r>=pumvisible() ? \"\\<lt>down>\" : \"\"\<lt>cr>"
 " }}}
 
-" Fix email paragraphs {{{
+"" Fix email paragraphs {{{
 nnoremap <leader>par :%s/^>$//<CR>
 " }}}
 
@@ -1519,10 +1611,6 @@ endif
 
 "" Show uptime in command line {{{
 map <leader>up :call UpTime()<cr>
-" }}}
-
-" hidden {{{
-set hidden
 " }}}
 
 "" Online Documentation {{{
@@ -1547,7 +1635,7 @@ endfunction
 map <leader>k :call OnlineDoc()<CR>
 " }}}
 
-"" What's this? {{{
+"" What's this??? {{{
 " Normal Mode, Visual Mode, and Select Mode,
 " use <Tab> and <Shift-Tab> to indent
 " @see http://c9s.blogspot.com/2007/10/vim-tips.html
@@ -1557,8 +1645,8 @@ map <leader>k :call OnlineDoc()<CR>
 " vmap <s-tab> <gv
 " }}}
 
-" Open Windows Explorer and Fouse current file. {{{
-" %:p:h     " Just Fold Name.
+"" Open Windows Explorer and Fouse current file. {{{
+" %:p:h		" Just Fold Name.
 if has("win32")
 	nmap <C-F11> :!start explorer /e,/select, %:p<CR>
 	imap <C-F11> <Esc><F6>
@@ -1567,7 +1655,7 @@ if has("win32")
 endif
 " }}}
 
-" get week day string in chinese. {{{
+"" get week day string in chinese. {{{
 function! Week_cn()
 	return "星期".strpart("日一二三四五六", strftime("%w")*3, 3)
 endfunction
@@ -1720,7 +1808,7 @@ if has('signs')
 endif
 " signs END}}}
 
-" 专用于复制粘贴后的空一行排版用 {{{
+"" 专用于复制粘贴后的空一行排版用 {{{
 " map <C-a> ]]%o<ESC>
 " map <C-x> :buffers<cr>:bu
 " }}}
@@ -1771,6 +1859,7 @@ map <leader>tcw :call Open_new_tab_and_tags_locate_cursor_word()<cr>
 " }}}
 
 "" 使用 grep 而不是 findstr {{{
+" 需要额外的 grep.exe。
 set grepprg=grep\ -nH
 " }}}
 
@@ -1835,10 +1924,9 @@ endfunction
 " let &guitablabel = "%{ShortTabLabel()}"
 " }}}
 
-"" abbriviations {{{
-iabbr teh the
+"" abbreviations {{{
 cabbr csc colorscheme Celibate
-cabbr so syntax on
+cabbr csm colorscheme ManShow
 " }}}
 
 "" default filetype {{{
@@ -1960,25 +2048,23 @@ set sessionoptions-=help
 " autocmd CursorMoved * silent! exe printf('match IncSearch /\<%s\>/', expand('<cword>'))
 " }}}
 
-"" MiniBufExplorer {{{
-let g:miniBufExplVSplit = 20
-let g:miniBufExplSplitBelow=1
-map <Leader>mt :TMiniBufExplorer<cr>
-" }}}
-
 "" sjump {{{
 nmap <M-g> :call sjump#JumpToLabel()<cr>
 " }}}
 
-" SaveSession {{{
-" :let g:session_autoload = 0
+"" SaveSession {{{
+let g:session_autoload = 0
+let g:session_autosave = 'no'
+"  help windows will not be restored:
+set sessionoptions-=help
 " }}}
 
 "" astyle {{{
-autocmd BufNewFile,BufRead *.c,*.cpp set formatprg=astyle\ -T8pbA8
+autocmd BufNewFile,BufRead *.c,*.cpp set formatprg=astyle\ -T8\ -p\ -b\ -A2\ --brackets=break\ --indent=spaces\ --indent-cases\ --indent-preprocessor\ --pad-header\ --pad-oper\ --unpad-paren\ --delete-empty-lines\ --suffix=none
 " }}}
 
 "" Gundo {{{
+" 需要 +python。
 " let g:gundo_width = 60
 " let g:gundo_preview_height = 40
 let g:gundo_right = 1
@@ -2010,7 +2096,32 @@ command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 " :read !ls ~
 " }}}
 
-" goto the last line when you reopen a file {{{
+"" VimShell {{{
+let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+let g:vimshell_right_prompt = 'vimshell#vcs#info("(%s)-[%b]", "(%s)-[%b|%a]")'
+let g:vimshell_enable_smart_case = 1
+if has('win32') || has('win64')
+	" Display user name on Windows.
+	let g:vimshell_prompt = $USERNAME."% "
+else
+	" Display user name on Linux.
+	let g:vimshell_prompt = $USER."% "
+endif
+autocmd FileType vimshell
+			\ call vimshell#altercmd#define('g', 'git')
+			\| call vimshell#altercmd#define('i', 'iexe')
+			\| call vimshell#altercmd#define('l', 'll')
+			\| call vimshell#altercmd#define('ll', 'ls -l')
+			\| call vimshell#hook#set('chpwd', ['g:my_chpwd'])
+function! g:my_chpwd(args, context)
+	call vimshell#execute('ls')
+endfunction
+autocmd FileType int-* call s:interactive_settings()
+function! s:interactive_settings()
+endfunction
+" }}}
+
+"" goto the last line when you reopen a file {{{
 au BufReadPost * if line("'\"")>0 |
 			\ if line("'\"")<=line("$") |
 			\ exe("norm '\"") |

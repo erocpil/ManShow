@@ -1,6 +1,6 @@
 " vim: ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " Author: lipcore
-" TimeStamp: 星期四 19 五月 2011 10:56:51 下午 中国标准时间
+" TimeStamp: 星期六 16 七月 2011 01:49:45 下午 中国标准时间
 " Filename: ManShow.vim
 " Description:
 "
@@ -68,7 +68,7 @@ fun! s:SetFullStatusline() "{{{
 	setlocal statusline+=%#StatuslineSyn#%{synIDattr(synID(line('.'),col('.'),1),'name')}		"syntax name
 	" setlocal statusline+=%#TlistGetTagname#%{Tlist_Get_Tagname_By_Line()}%0*	" Tlist_Get_Tagname_By_Line
 	" setlocal statusline+=%#TlistGetTagname#%{Tlist_Get_Tag_Prototype_By_Line()}%0*	" Tlist_Get_Tag_Prototype_By_Line
-	setlocal statusline+=%#GetTagname#%{GetTagName(line('.'))}%0*				" from ctags.vim
+	setlocal statusline+=%#GetTagName#%{GetTagName(line('.'))}%0*				" from ctags.vim
 
 	" setlocal statusline+=%#UpTime#%{RetUpTime()}%0*							" uptime
 	" setlocal statusline+=%#ShowUtf8Sequence#%{ShowUtf8Sequence()}				" utf-8 sequence
@@ -135,7 +135,7 @@ if has("autocmd")
 	endif
 endif
 
-function TextMode()
+function! TextMode()
 	" let miscstr = (&spell ? 'spell ' : '')
 	" let fencstr = (&fenc == '' ? &enc : &fenc) . (&bomb ? '.BOM' : '')
 	let textmode = (&et ? 'e' : 'E') . &ts . &sw .

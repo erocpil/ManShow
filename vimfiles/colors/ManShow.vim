@@ -22,7 +22,7 @@ let g:colors_name = "ManShow"
 " 	hi CursorLine            guibg=#e8f2ff
 hi CursorColumn          guibg=#a8f2ff
 " hi MatchParen            guibg=#ffff00 gui=bold
-hi MatchParen            guibg=Yellow	guifg=Cyan	gui=bold
+hi MatchParen            guibg=Yellow	guifg=#00B2BF	gui=bold
 " 	hi Pmenu    guifg=Black  guibg=#ddeeff
 " 	hi PmenuSel guifg=White  guibg=#4088d0
 " endif
@@ -30,24 +30,24 @@ hi MatchParen            guibg=Yellow	guifg=Cyan	gui=bold
 " General colors
 " hi Cursor     guifg=White    guibg=Black
 hi lCursor    guifg=White    guibg=Black
-hi Normal     guifg=Black    guibg=Grey99
+hi Normal     guifg=Black    guibg=white " #DEFF7C
 hi NonText    guifg=gray40   guibg=gray95
 hi SpecialKey guifg=#ff00ff
 hi Title      guifg=Black                  gui=bold
 hi Visual     guibg=#bbddff
 
 " Syntax highlighting
-hi Comment    guifg=#0066cc
+hi Comment    guifg=blue
 hi Constant   guifg=#aa0000
 hi Number     guifg=#aa0000
-hi String     guifg=#008000
+hi String     guifg=Blue	guibg=Grey97
 hi Identifier guifg=#0033cc
-hi Operator   guifg=#0066cc                gui=bold
+hi Operator   guifg=#F066cc                gui=bold
 hi Function   guifg=#aa0000
 hi PreProc    guifg=#aa0000
 hi Special    guifg=#cc6600
-hi Statement  guifg=#008040                gui=bold
-hi Type       guifg=#0066cc                gui=bold
+hi Statement  guifg=#8B22F4	gui=bold	" #C6FF00
+hi Type       guifg=#0066cc                " gui=bold
 hi Directory  guifg=#0066cc                gui=bold
 
 hi DiffAdd                   guibg=#ccffcc
@@ -57,17 +57,17 @@ hi DiffText                  guibg=#ffcccc gui=bold
 
 hi Folded     guifg=gray30   guibg=gray95
 hi SignColumn	guifg=Blue	guibg=White
-hi LineNr		guibg=#A095C4	guifg=White		ctermfg=White       ctermbg=DarkBlue    term=underline
-hi FoldColumn 		guibg=#FDF5E6	guifg=#8ae234	ctermfg=White       ctermbg=DarkBlue    term=standout
+hi LineNr		guibg=white	guifg=blue	ctermfg=White       ctermbg=DarkBlue    term=underline
+hi FoldColumn 		guibg=grey98	guifg=#A095C4	ctermfg=White       ctermbg=DarkBlue    term=standout
 hi Search			guibg=White	guifg=#00B2BF	ctermfg=DarkRed     ctermbg=Brown       term=bold       gui=reverse
 hi IncSearch	term=reverse	cterm=reverse	gui=reverse
 hi vimOper	guifg=Purple
 hi vimHiAttrib	guifg=#00B2BF
-hi vimOption	guifg=#0F99FF
+hi vimOption	gui=bold guifg=#0F99FF
 
 if version >= 700
 	set cursorline
-	hi CursorLine		term=underline	cterm=underline	guibg=Grey90	" #FAEFE8	" LightYellow
+	hi CursorLine		term=underline	cterm=underline	guibg=#FAEFE8
 	" 这三行与下面的配置有冲突
 	" highlight CurrentLine guibg=Grey90	" guifg=White
 	" au! Cursorhold * exe 'match CurrentLine /\%' . line('.') . 'l.*/'
@@ -82,17 +82,18 @@ endif
 " hi CursorColumn cterm=NONE ctermbg=darkred ctermfg=white guibg=darkred guifg=white
 " nnoremap <Leader>c :set cursorline! cursorcolumn!<CR>
 
-hi perlMatch			guifg=#0F99FF   	ctermfg=Brown       ctermbg=Black
-hi perlSubstitutionGQQ	guifg=#FF99AA   	ctermfg=Brown       ctermbg=Black
-hi perlSpecialMatch		guifg=#FF9900   	ctermfg=Brown       ctermbg=Black
-hi perlSpecialString	guifg=#FF9911   	ctermfg=Brown       ctermbg=Black
+hi perlMatch			gui=bold	guifg=#f0a28F	ctermfg=Brown	ctermbg=Black
+hi perlSubstitutionGQQ	guifg=DarkBLue	guibg=#F7FEFF	ctermfg=Brown	ctermbg=Black
+hi perlSpecialMatch		gui=bold	guifg=#0F9900	guibg=#FEFAFA	ctermfg=Brown	ctermbg=Black
+hi perlSpecialString	gui=bold	guifg=blue	guibg=#E7FFF7	ctermfg=Brown	ctermbg=Black
 hi perlVarPlain			guifg=SteelBlue
-hi perlVarPlain2			guifg=YellowGreen
-hi perlMatchStartEnd	gui=bold	guifg=Green
-hi perlStringStartEnd	guifg=BLue
-hi perlSubname			gui=bold	guifg=Cyan2
-hi perlString		guifg=Purple
+hi perlVarPlain2		guifg=#48B9DC
+hi perlMatchStartEnd	gui=bold	guifg=Magenta
+hi perlStringStartEnd	gui=bold guifg=DarkBLue guibg=Grey80	" #EAFF37
+hi perlSubname			gui=bold	guifg=#1E90FF
+hi perlString		guifg=Purple	guibg=Grey93
 hi perlNumber		guifg=#EB7153
+hi perlSharpBang	gui=bold,italic	guifg=Blue
 
 "" Statusline
 hi StatuslineBufNr		cterm=none   	ctermfg=black 	ctermbg=cyan   	gui=none	guibg=#9B30FF	guifg=#ffffff
@@ -149,27 +150,39 @@ hi StdName	        guifg=#5276e6     gui=bold  ctermfg=69  ctermbg=17 cterm=bold
 hi MicroController  guifg=#d00000     gui=bold  ctermfg=160 ctermbg=17 cterm=bold
 hi AnsiFuncPtr	    guifg=#ff0000     gui=NONE  ctermfg=196 ctermbg=17 cterm=none
 hi PreCondit        guifg=#a06129     gui=NONE  ctermfg=130 ctermbg=17 cterm=none
-hi Operator         guifg=Yellow      gui=NONE  ctermfg=226 ctermbg=17 cterm=none
+" hi Operator         guifg=Yellow      gui=NONE  ctermfg=226 ctermbg=17 cterm=none
 hi OperatorBold	    guifg=Yellow      gui=bold  ctermfg=226 ctermbg=17 cterm=bold
 hi BlockBraces	    guifg=Yellow      gui=bold  ctermfg=226 ctermbg=17 cterm=bold
-hi cMathOperator            guifg=#3EFFE2   ctermfg=14
-hi cPointerOperator         guifg=#3EFFE2   ctermfg=14
-hi cLogicalOperator         guifg=#3EFFE2   ctermfg=14
-hi cLogicalOperator         guifg=#3EFFE2   ctermfg=14
+hi cMathOperator            guifg=#2207E4	ctermfg=14
+hi cPointerOperator         gui=bold	guifg=#0EAFA2   ctermfg=14
+hi cLogicalOperator         guifg=#FF0F0F	ctermfg=14
 hi cBinaryOperator          guifg=#F0088C   gui=NONE	ctermfg=161	ctermbg=17
 hi cBinaryOperatorError     guifg=white     guibg=#b2377a	ctermfg=231	ctermbg=169	cterm=none
-hi cSemicolon				guifg=#FFA70F   ctermfg=202		ctermbg=17	cterm=none
+hi cSemicolon				guifg=#077F7F	guibg=grey95   ctermfg=202		ctermbg=17	cterm=none
 hi cThis					guifg=#00FF00   ctermfg=15
 hi ccString					guifg=#5BBD2B   ctermfg=15
 hi cccout					guifg=#79378B	ctermfg=16
 hi ccendl					guifg=#C57CAC	ctermfg=17
 hi cAsk						guifg=#FF0000	ctermfg=18
+hi cDefine					guifg=#0F0FF0
 hi TabIndent				guifg=Grey40	ctermfg=18
-
+hi cParenError	gui=bold	guifg=red	guibg=Grey80	ctermfg=18
+hi Error	gui=bold	guifg=red	guibg=lightred
 " Highlight Class and Function names
-hi cCustomFunc	gui=bold	guifg=Green
+hi cCustomFunc	gui=bold	guifg=#AE0072
 hi cCustomClass	gui=bold	guifg=#F57CAC
 hi cCustomScope	gui=bold	guifg=#00F5FF
+hi cType					guifg=#A00F15	ctermfg=18
 
 hi qfLineNr	guibg=Yellow	guifg=Black
+
+hi cStorageClass	gui=bold	guifg=#0B90E1
+hi gtkType	gui=italic	guifg=#00B2BF
+hi gtkFunction gui=italic	guifg=#0B90E1
+hi gdkFunction gui=bold	guifg=#0B90E1
+hi gdkType	gui=bold	guifg=#0A90E1
+hi glibType	gui=italic,bold	guifg=#0B90E1
+hi gtkMacro	gui=italic	guifg=#0B90E1
+hi glibMacro	gui=bold	guifg=#0B90E1
+
 "vim:ts=4:tw=4:foldmethod=expr

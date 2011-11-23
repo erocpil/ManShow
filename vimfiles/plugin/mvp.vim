@@ -1,4 +1,4 @@
-let g:mvpTitle = "title"
+﻿let g:mvpTitle = "title"
 let g:mvpArticle= "no article"
 
 function! LrcPerl()
@@ -8,14 +8,25 @@ use Win32::OLE;
 use Time::HiRes qw /usleep/;
 
 ## open lrc
-open LRC, "snow.lrc" or die "Cannot open lrc: $!";
+# open LRC, "snow.lrc" or die "Cannot open lrc: $!";
 
 ## start player in a thread
 sub thread_play
 {
 	my $shell = Win32::OLE->new("WScript.Shell") or die "Cannot create WScript Shell! $!";
-	my $song = 'sonw.mp3';
-	$shell->run("mplayer ${song}", 0, 0);
+
+	my $dir_to_process = "e:/Favorite/Melody/周慧敏";
+	opendir DH, $dir_to_process or die "Cannot open $dir_to_process: $!";
+	my $songs = "";
+	foreach my $song (readdir DH) {
+		if($song =~ m/(mp3|wma)$/i) {
+				$songs .= $song . " ";
+			}
+	}
+	closedir DH;
+	VIM::Msg($songs);
+	# $shell->run("mplayer ${songs}", 0, 0);
+	$shell->run("mplayer 痴心换情深.mp3", 0, 0);
     return 0;
 }
 my $t = threads->create(\&thread_play);
