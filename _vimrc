@@ -1,6 +1,6 @@
 ﻿" vim: sw=4:ts=4:ft=vim:foldmethod=expr:tw=75:foldcolumn=2
 " Author: erocpil
-" TimeStamp: Fri 11 Nov 2011 04:45:23 PM GMT
+" TimeStamp: 星期三 28 十二月 2011 07:38:50 下午 中国标准时间
 " Filename: _vimrc
 " Description: a personal vim configuration
 " Version:
@@ -231,7 +231,8 @@ if has("gui_running")
 		"" fonts
 		" 等宽英文字体
 		" set guifont=DejaVu_Sans_Mono:h10.875:cANSI
-		set guifont=Monaco:h10.75:cANSI
+		" set guifont=Monaco:h10.75:cANSI
+		set guifont=Menlo:h10.75:cANSI
 		" 设置中文字体，微软雅黑需要重新编译 Vim 。
 		" 微软雅黑的字号要与英文字体一同调节，否则有向左下方下沉的趋势。
 		set gfw=Microsoft_YaHei:h11
@@ -597,8 +598,14 @@ set lbr
 "" CTags {{{
 if has('win32')
 	" 添加额外的 tags，需要先生成。
-	set tags+=C:/GTK/include/tags
-	set path+=C:/GTK/include/,C:/GTK/include/*
+	set tags+=C:/gtk/include/tags
+	set path+=C:/gtk/include/,C:/gtk/include/*
+	set tags+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtGui/tags
+	set path+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtGui/,C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtGui/*
+	set tags+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtCore/tags
+	set path+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtCore/,C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtCore/*
+	set tags+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtNetwork/tags
+	set path+=C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtNetwork/,C:/QtSDK/Desktop/Qt/4.7.4/mingw/include/QtNetwork/*
 else
 	set tags+=/usr/include/gtk-2.0/gtk/tags,/usr/include/gtk-2.0/gdk/tags
 	set path+=/usr/include/gtk-2.0/gtk/*,/usr/include/gtk-2.0/gdk/*
@@ -1034,6 +1041,13 @@ let g:miniBufExplModSelTarget = 1
 let g:miniBufExplVSplit = 20
 let g:miniBufExplSplitBelow=1
 map <Leader>mt :TMiniBufExplorer<cr>
+" }}}
+
+"" Tagbar {{{
+" 在左侧显示
+let g:tagbar_left = 1
+let g:tagbar_width = 35
+map <F5> :TagbarToggle<cr>
 " }}}
 
 "" Omni menu colors {{{
@@ -1974,9 +1988,10 @@ function! ClosePair(char)
 	endif
 endfunction
 
-"" select & search
+"" select & search {{{
 vnoremap <silent> <leader>/ y/<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
 vnoremap <silent> <leader>? y?<C-R>=escape(@", '\\/.*$^~[]')<CR><CR>
+" }}}
 
 "" Comment Lines according to a given filetype {{{
 " http://vim.wikia.com/wiki/Comment_Lines_according_to_a_given_filetype
@@ -2118,6 +2133,15 @@ function! g:my_chpwd(args, context)
 endfunction
 autocmd FileType int-* call s:interactive_settings()
 function! s:interactive_settings()
+endfunction
+" }}}
+
+"" 针对大文件 {{{
+function! ChkLargeFile()
+	let size = getfsize(expand("%"))/1024
+	if size > 200
+		syntax clear
+	endif
 endfunction
 " }}}
 
